@@ -1,9 +1,99 @@
 # include "includes/cube3d.h"
 
-void run_game(int cr_bmp, char namefile, t_all *all)
+int error_str(int error)
 {
-    all->win.mlx_ptr = mlx_init();
+  if (error == ERROR_READING_FILE)
+    ft_putstr_fd("\033[31m\nERROR\nNo such file in directory\n\n\033[0m", 2);
+  else if (error == ERROR_MAP)
+    ft_putstr_fd("\033[33mCorrect you map.\n\n\033[0m", 2);
+  else if (error == ERROR_MAP_MANY_POSITIONS)
+    ft_putstr_fd("\033[31m\nERROR\nYour map has no one gamer position\n\n\033[0m", 2);
+  else if (error == ERROR_MAP_NO_POSITIONS)
+    ft_putstr_fd("\033[31m\nERROR\nYour map has no gamer position\n\n\033[0m", 2);
+  else if (error == ERROR_MAP_NOT_CLOSED)
+    ft_putstr_fd("\033[31m\nERROR\nYour map not closed\n\n\033[0m", 2);
+  else if (error == ERROR_RESOLUTION)
+    ft_putstr_fd("\033[31m\nERROR\nResolution is not correct\n\n\033[0m", 2);
+  else if (error == ERROR_END_lINE)
+    ft_putstr_fd("\033[31m\nERROR\nInvalid chars in arguments\n\n\033[0m", 2);
+  else if (error == ERROR)
+    ft_putstr_fd("\033[31m\nERROR\nInvalid arguments\n\n\033[0m", 2);
+  return (ERROR);
 }
+
+int		ft_atoi_cub(int *i, char *buf, int num) 
+{
+	while (ft_strchr(INVCHARS, buf[(*i)]))
+    (*i)++;
+	while (buf[*i] >= '0' && buf[*i] <= '9')
+	{
+		num = num * 10 + (buf[*i] - 48);
+		(*i)++;
+	}
+	return (num);
+}
+
+int get_resolution(int *i, char *buf, t_all *all)
+{
+  if (all->win.x || all->win.y)
+    return (ERROR_RESOLUTION);
+  (*i)++;
+  all->win.x = ft_atoi_cub(i, buf, 0);
+  all->win.y = ft_atoi_cub(i, buf, 0);
+  mlx_get_screen_size(&all->win.max_width, &all->win.max_height);
+  if (all->win.x > all->win.max_width)
+    all->win.x = all->win.max_width;
+  if (all->win.y > all->win.max_height)
+    all->win.y = all->win.max_height;
+  while (!ft_strchr(INVCHARS, buf[(*i)]))
+    (*i)++;
+  if (all->win.x < 1 || all->win.y < 1 || buf[*i] != '\0')
+    return (ERROR_END_lINE);
+  return (SUCCESS);
+}
+
+int fetch_line_file(int i, char *buf, t_all *all)
+{
+  int error;
+
+  error = 0;
+  while (ft_strchr(INVCHARS, buf[i]))
+    i++;
+  if (buf[i] == 'R' && buf[i + 1] == ' ')
+    error = get_resolution(&i ,buf , all);
+  return ((error == 1 ? SUCCESS : error));
+}
+
+int file_parse(int fd, char *namefile, t_all *all, int error)
+{
+  char *buffer;
+  
+  if ((fd = open(namefile, O_RDONLY)) == -1)
+    return (ERROR_READING_FILE);
+  while ((get_next_line(fd, &buffer)) > ERROR)
+  {
+    if ((error = fetch_line_file(0, buffer, all)) != SUCCESS)
+      return (error);
+    free(buffer);
+  }
+  close(fd);
+  return (SUCCESS);
+}
+
+int run_game(int cr_bmp, char *namefile, t_all *all)
+{
+    int error;
+
+    error = 0;
+    if ((error = file_parse(0, namefile, all, 0)) != SUCCESS)
+      return error_str(error);
+    all->win.mlx_ptr = mlx_init();
+    cr_bmp = 0;
+    namefile = 0;
+    
+    return(SUCCESS);
+}
+
 
 void init_struct(int cr_bmp, char *namefile)
 {
@@ -20,9 +110,9 @@ int main(int argc, char **argv)
 {
     if (argc == 3 && !ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4) && \
       !ft_strncmp(argv[2], "--save", 6))
-      init_struct(1, av[1]);
+      init_struct(1, argv[1]);
     else if (argc == 2 && !ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4))
-      init_struct(0, av[1]);
+      init_struct(0, argv[1]);
     else
       ft_putstr_fd("\033[31m\nERROR\nMAIN ARGUMENTS\n\n\033[0m", 2);
 }

@@ -9,18 +9,36 @@
 # include <unistd.h>
 # include <fcntl.h>
 
+# define INVCHARS "\t\v\r\f\n "
+
+typedef enum s_errors
+{
+	ERROR,
+	SUCCESS,
+	ERROR_READING_FILE,
+	ERROR_MAP,
+	ERROR_MAP_MANY_POSITIONS,
+	ERROR_MAP_NO_POSITIONS,
+	ERROR_MAP_NOT_CLOSED,
+	ERROR_RESOLUTION,
+	ERROR_END_lINE,
+
+
+} 				t_errors;
+
 typedef struct	s_win
 {
 	void 			*mlx_ptr;
 	void			*win_ptr;
 	int				x;
 	int				y;
+	int 			max_width;
+	int 			max_height;
 }				t_win;
 
 typedef struct	s_img
 {
 	void        	*img_ptr;
-    char        	*addr;
     int         	bits_per_pixel;
     int         	line_length;
     int         	endian;

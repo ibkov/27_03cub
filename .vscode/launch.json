@@ -1,0 +1,16 @@
+{
+    "configurations": [
+    {
+        "name": "(lldb) Запустить",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/cube3D",
+        "args": ["maps/map.cub"],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb"
+    }
+    ]
+}
