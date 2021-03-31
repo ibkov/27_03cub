@@ -52,6 +52,11 @@ int get_resolution(int *i, char *buf, t_all *all)
   return (SUCCESS);
 }
 
+int get_texture(int *i, char *buf, t_all *all)
+{
+  
+}
+
 int fetch_line_file(int i, char *buf, t_all *all)
 {
   int error;
@@ -61,6 +66,10 @@ int fetch_line_file(int i, char *buf, t_all *all)
     i++;
   if (buf[i] == 'R' && buf[i + 1] == ' ')
     error = get_resolution(&i ,buf , all);
+  if (buf[i] == 'N' && buf[i + 1] == 'O' && buf[i + 2] == ' ')
+    error = get_texture(&i ,buf , all);
+  if (all->win.x && all->win.y)
+    error = 1;
   return ((error == 1 ? SUCCESS : error));
 }
 
@@ -88,6 +97,7 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     if ((error = file_parse(0, namefile, all, 0)) != SUCCESS)
       return error_str(error);
     all->win.mlx_ptr = mlx_init();
+    ft_putstr_fd("\ngame start\n", 1);
     cr_bmp = 0;
     namefile = 0;
     
