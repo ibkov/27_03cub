@@ -1,7 +1,12 @@
 {
-    "files.associations": {
-        "__locale": "c",
-        "__tuple": "c",
-        "array": "c"
+    "[typescript]": {
+      "editor.formatOnSave": true,
+      "editor.formatOnPaste": true
+    },
+    "[markdown]": {
+      "editor.formatOnSave": true,
+      "editor.wordWrap": "on",
+      "editor.renderWhitespace": "all",
+      "editor.acceptSuggestionOnEnter": "off"
     }
-}
+  }
