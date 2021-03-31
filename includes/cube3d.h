@@ -52,8 +52,9 @@ typedef struct s_tex
 	int		*so;
 	int 	*ea;
 	int 	*we;
-	int 	ceil;
-	int 	floor;
+	int 	*sp;
+	unsigned int 	ceil;
+	unsigned int 	floor;
 	int 	fd;
 } 				t_tex;
 
@@ -65,6 +66,14 @@ typedef struct s_game
 	int 	gpos_x;
 	int		gpos_y;
 }				t_game;
+
+typedef struct 	s_color
+{
+	int		r;
+	int		g;
+	int		b;
+}				t_color;
+
 
 typedef struct s_all
 {
