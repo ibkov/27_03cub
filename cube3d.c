@@ -57,13 +57,13 @@ int check_full_tex(t_all *all, char *filename_tex)
   void *img;
   int array[5];
 
-  if (ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xmp", 4))
+  if (!ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xmp", 4))
     return (ERROR);
   if ((all->tex.fd = open(filename_tex, O_RDONLY)) == -1)
     return (ERROR);
   close(all->tex.fd);
-  img = mlx_xpm_file_to_image(all->win.mlx_ptr, filename_tex, &array[0], &array[1]);
-  if (array[0] || array[1] || !img)
+  img = mlx_xpm_file_to_image(&all->win.mlx_ptr, filename_tex, &array[0], &array[1]);
+  if (array[0] != 64 || array[1] != 64 || !img)
     return (ERROR);
   all->img.addr = (unsigned int *)mlx_get_data_addr(img, &array[2], &array[3], &array[4]);
   free(img);
@@ -86,8 +86,8 @@ int get_texture(int *i, char *buf, t_all *all)
     return (ERROR_MALLOC);
   *i = rem;
   rem = 0;
-  while(buf[*i] != ' ' && buf[*i])
-    filename_tex[rem++] = buf[(*i++)];
+  while(buf[*i] != ' ' && buf[*i] != '\0')
+    filename_tex[rem++] = buf[(*i)++];
   filename_tex[rem] = '\0';
   check_full_tex(all, filename_tex);
   free(filename_tex);
