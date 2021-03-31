@@ -22,6 +22,7 @@ typedef enum s_errors
 	ERROR_MAP_NOT_CLOSED,
 	ERROR_RESOLUTION,
 	ERROR_END_lINE,
+	ERROR_MALLOC,
 
 
 } 				t_errors;
@@ -53,6 +54,7 @@ typedef struct s_tex
 	int 	*we;
 	int 	ceil;
 	int 	floor;
+	int 	fd;
 } 				t_tex;
 
 typedef struct s_game
