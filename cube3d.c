@@ -18,6 +18,10 @@ int error_str(int error)
     ft_putstr_fd("\033[31m\nERROR\nInvalid chars in arguments\n\n\033[0m", 2);
   else if (error == ERROR)
     ft_putstr_fd("\033[31m\nERROR\nInvalid arguments\n\n\033[0m", 2);
+  else if (error == ERROR_TEXTUTE_FILE)
+    ft_putstr_fd("\033[31m\nERROR\nFile texture not found\n\033[0m", 2);
+   else if (error == ERROR_TEXTUTE_EX)
+    ft_putstr_fd("\033[31m\nERROR\nInvalid extention texture file\n\n\033[0m", 2);
   return (ERROR);
 }
 
@@ -57,10 +61,10 @@ int check_full_tex(t_all *all, int **addr, char *filename_tex)
   void *img;
   int array[5];
 
-  if (!ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xmp", 4))
-    return (ERROR);
+  if (!(ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xmp", 4)))
+    return (ERROR_TEXTUTE_EX);
   if ((all->tex.fd = open(filename_tex, O_RDONLY)) == -1)
-    return (ERROR);
+    return (ERROR_TEXTUTE_FILE);
   close(all->tex.fd);
   img = mlx_xpm_file_to_image(&all->win.mlx_ptr, filename_tex, &array[0], &array[1]);
   if (array[0] != 64 || array[1] != 64 || !img)
@@ -74,8 +78,10 @@ int check_full_tex(t_all *all, int **addr, char *filename_tex)
 int get_texture(int *i, char *buf, t_all *all, int **addr)
 {
   int rem;
-  char *filename_tex; 
+  char *filename_tex;
+  int error;
 
+  error = 0;
   if (*addr != NULL)
 		return (ERROR);
   (*i) += 2;
@@ -91,9 +97,9 @@ int get_texture(int *i, char *buf, t_all *all, int **addr)
   while(buf[*i] != ' ' && buf[*i] != '\0')
     filename_tex[rem++] = buf[(*i)++];
   filename_tex[rem] = '\0';
-  check_full_tex(all, addr, filename_tex);
+  error = check_full_tex(all, addr, filename_tex);
   free(filename_tex);
-  return (SUCCESS);
+  return (error);
 }
 
 int get_color(int *i, char *buf, unsigned int *clr)
@@ -139,7 +145,7 @@ int fetch_line_file(int i, char *buf, t_all *all)
     error = get_color(&i ,buf, &all->tex.floor);
    if (buf[i] == 'C' && buf[i + 1] == ' ')
     error = get_color(&i ,buf, &all->tex.ceil);
-  if (all->win.x && all->win.y)
+  if (all->win.x && all->win.y && all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
     error = 1;
   return ((error == 1 ? SUCCESS : error));
 }

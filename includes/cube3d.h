@@ -23,6 +23,8 @@ typedef enum s_errors
 	ERROR_RESOLUTION,
 	ERROR_END_lINE,
 	ERROR_MALLOC,
+	ERROR_TEXTUTE_EX,
+	ERROR_TEXTUTE_FILE
 
 
 } 				t_errors;
