@@ -29,9 +29,14 @@ typedef enum s_errors
 
 } 				t_errors;
 
-typedef struct	s_win
+typedef struct s_mlx
 {
 	void 			*mlx_ptr;
+}				t_mlx;
+
+
+typedef struct	s_win
+{
 	void			*win_ptr;
 	int				x;
 	int				y;
@@ -69,6 +74,12 @@ typedef struct s_game
 	int		gpos_y;
 }				t_game;
 
+typedef struct				s_map
+{
+	char					*line;
+	struct s_map			*next;
+}							t_map;
+
 typedef struct 	s_color
 {
 	int		r;
@@ -77,12 +88,42 @@ typedef struct 	s_color
 }				t_color;
 
 
+typedef struct	s_ray
+{
+	double			x;
+	double			y;
+	int				i;
+	double			v;
+	double			w;
+}				t_ray;
+
+typedef struct	s_hit
+{
+	double			x;
+	double			y;
+	double			d;
+}				t_hit;
+
+typedef struct	s_dir
+{
+	double			x;
+	double			y;
+	double			a;
+}				t_dir;
+
+
 typedef struct s_all
 {
 	t_game 	game;
 	t_tex	tex;
 	t_img   img;
 	t_win   win;
+	t_mlx	mlx;
+	t_map   *map;
+	t_ray	ray;
+	t_hit	hit;
+	t_dir	dir;
+	char 	*tmp;
 } 				t_all;
 
 

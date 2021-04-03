@@ -1,10 +1,9 @@
 R 800 600
-NO ./textures/NO.xp
+NO  ./textures/NO.xpm
 SO ./textures/SO.xpm
 WE ./textures/WE.xpm
 EA ./textures/EA.xpm
 S ./textures/WE.xpm
-
 
 F 220,100,0
 C 2,2,2
