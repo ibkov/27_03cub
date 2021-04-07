@@ -138,5 +138,6 @@ typedef struct s_all
 
 
 void init_ray(t_all *all);
+void verLine(int x, int drawStart, int drawEnd, int color, t_all *all);
 
 #endif

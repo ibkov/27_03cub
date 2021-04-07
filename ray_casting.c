@@ -1,10 +1,11 @@
 #include "./includes/cube3d.h"
 
+
 void verLine(int x, int drawStart, int drawEnd, int color, t_all *all)
 {
     while (drawStart < drawEnd)
     {
-        all->img.addr[drawStart * all->win.y + x] = color;
+        all->img.addr[drawStart * all->win.x + x] = color;
         drawStart++;
     }
 }
@@ -72,13 +73,13 @@ void init_ray(t_all *all)
             {
             sideDistX += deltaDistX;
             mapX += stepX;
-            side = 0;
+            side = '0';
             }
             else
             {
             sideDistY += deltaDistY;
             mapY += stepY;
-            side = 1;
+            side = '1';
             }
             //Check if ray has hit a wall
             if(all->game.map[mapX][mapY] == '1') hit = 1;
@@ -88,6 +89,9 @@ void init_ray(t_all *all)
         else          perpWallDist = (mapY - all->game.gpos_y + (1 - stepY) / 2) / all->ray.dir_y;
 
         int h = 600;
+        int hscreen = (int)h / 2;
+        verLine(x, 0, hscreen, all->tex.floor, all);
+        verLine(x, hscreen, h - 1, all->tex.ceil, all);
         //Calculate height of line to draw on screen
         int lineHeight = (int)(h / perpWallDist);
 
@@ -104,7 +108,6 @@ void init_ray(t_all *all)
 
         //give x and y sides different brightness
         if(side == 1) {color = color / 2;}
-
         //draw the pixels of the stripe as a vertical line
         verLine(x, drawStart, drawEnd, color, all);
         x++;

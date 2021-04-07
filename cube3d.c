@@ -320,8 +320,8 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     if ((error = file_parse(0, namefile, all, 0)) != SUCCESS)
       return error_str(error);
     all->mlx.mlx_ptr = mlx_init();
-    all->game.gpos_x = 2;
-    all->game.gpos_y = 2;
+    all->game.gpos_x = 3;
+    all->game.gpos_y = 3;
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
     ft_putstr_fd("\ngame start\n", 1);
     init_ray(all);
