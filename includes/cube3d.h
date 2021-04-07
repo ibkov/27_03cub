@@ -50,8 +50,15 @@ typedef struct	s_img
     int         	bits_per_pixel;
     int         	line_length;
     int         	endian;
-	unsigned int	*addr;
+	int				*addr;
 }				t_img;
+
+typedef struct	s_stk
+{
+	double			x;
+	double			y;
+	double			d;
+}				t_stk;
 
 typedef struct s_tex
 {
@@ -90,11 +97,13 @@ typedef struct 	s_color
 
 typedef struct	s_ray
 {
-	double			x;
-	double			y;
-	int				i;
-	double			v;
-	double			w;
+	double			camera_x;
+	double 			ray_dir_x;
+	double 			ray_dir_y;
+	double			dir_x;
+	double			dir_y;
+	double			plane_x;
+	double			plane_y;
 }				t_ray;
 
 typedef struct	s_hit
@@ -124,7 +133,10 @@ typedef struct s_all
 	t_hit	hit;
 	t_dir	dir;
 	char 	*tmp;
+	t_stk	*stk;
 } 				t_all;
 
+
+void init_ray(t_all *all);
 
 #endif

@@ -311,27 +311,6 @@ int file_parse(int fd, char *namefile, t_all *all, int error)
   return (SUCCESS);
 }
 
-int	ft_draw(t_all *s)
-{
-	t_ray	ray;
-	t_hit	hit;
-
-	ray.x = 0;
-	ray.y = 0;
-	ray.i = 0;
-	ray.v = 0;
-	ray.w = 0;
-	hit.x = 0;
-	hit.y = 0;
-	hit.d = 0;
-	s->ray = ray;
-	s->hit = hit;
-	ft_screen(s);
-	mlx_put_image_to_window(s->mlx.mlx_ptr, s->win.win_ptr, s->img.img_ptr, 0, 0);
-	free(s->img.img_ptr);
-	free(s->img.addr);
-	return(0);
-}
 
 int run_game(int cr_bmp, char *namefile, t_all *all)
 {
@@ -341,9 +320,11 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     if ((error = file_parse(0, namefile, all, 0)) != SUCCESS)
       return error_str(error);
     all->mlx.mlx_ptr = mlx_init();
+    all->game.gpos_x = 2;
+    all->game.gpos_y = 2;
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
-    ft_draw();
     ft_putstr_fd("\ngame start\n", 1);
+    init_ray(all);
     cr_bmp = 0;
     namefile = 0;
     mlx_loop(all->mlx.mlx_ptr);
