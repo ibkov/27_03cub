@@ -1,60 +1,5 @@
 #include "./includes/cube3d.h"
 
-int error_str(int error)
-{
-  if (error == ERROR_READING_FILE)
-    ft_putstr_fd("\033[31m\nERROR\nNo such file in directory\n\n\033[0m", 2);
-  else if (error == ERROR_MAP)
-    ft_putstr_fd("\033[33mCorrect you map.\n\n\033[0m", 2);
-  else if (error == ERROR_MAP_MANY_POSITIONS)
-    ft_putstr_fd("\033[31m\nERROR\nYour map has no one gamer position\n\n\033[0m", 2);
-  else if (error == ERROR_MAP_NO_POSITIONS)
-    ft_putstr_fd("\033[31m\nERROR\nYour map has no gamer position\n\n\033[0m", 2);
-  else if (error == ERROR_MAP_NOT_CLOSED)
-    ft_putstr_fd("\033[31m\nERROR\nYour map not closed\n\n\033[0m", 2);
-  else if (error == ERROR_RESOLUTION)
-    ft_putstr_fd("\033[31m\nERROR\nResolution is not correct\n\n\033[0m", 2);
-  else if (error == ERROR_END_lINE)
-    ft_putstr_fd("\033[31m\nERROR\nInvalid chars in arguments\n\n\033[0m", 2);
-  else if (error == ERROR)
-    ft_putstr_fd("\033[31m\nERROR\nInvalid arguments\n\n\033[0m", 2);
-  else if (error == ERROR_TEXTUTE_FILE)
-    ft_putstr_fd("\033[31m\nERROR\nFile texture not found\n\033[0m", 2);
-   else if (error == ERROR_TEXTUTE_EX)
-    ft_putstr_fd("\033[31m\nERROR\nInvalid extention texture file\n\n\033[0m", 2);
-  return (ERROR);
-}
-
-int		ft_atoi_cub(int *i, char *buf, int num) 
-{
-	while (ft_strchr(INVCHARS, buf[(*i)]))
-    (*i)++;
-	while (buf[*i] >= '0' && buf[*i] <= '9')
-	{
-		num = num * 10 + (buf[*i] - 48);
-		(*i)++;
-	}
-	return (num);
-}
-
-int get_resolution(int *i, char *buf, t_all *all)
-{
-  if (all->win.x || all->win.y)
-    return (ERROR_RESOLUTION);
-  (*i)++;
-  all->win.x = ft_atoi_cub(i, buf, 0);
-  all->win.y = ft_atoi_cub(i, buf, 0);
-  mlx_get_screen_size(&all->win.max_width, &all->win.max_height);
-  if (all->win.x > all->win.max_width)
-    all->win.x = all->win.max_width;
-  if (all->win.y > all->win.max_height)
-    all->win.y = all->win.max_height;
-  while (!ft_strchr(INVCHARS, buf[(*i)]))
-    (*i)++;
-  if (all->win.x < 1 || all->win.y < 1 || buf[*i] != '\0')
-    return (ERROR_END_lINE);
-  return (SUCCESS);
-}
 
 int check_full_tex(t_all *all, int **addr, char *filename_tex)
 {
@@ -161,78 +106,18 @@ char *cor_start_ch(char *buffer)
   return (new_str);
 }
 
-t_map	*ft_lstn(char *content)
-{
-	t_map	*new_elem;
-
-	if (!(new_elem = malloc(sizeof(t_map))))
-		return (0);
-	new_elem->line = content;
-	new_elem->next = 0;
-	return (new_elem);
-}
-
-t_map	*ft_lstl(t_map *lst)
-{
-	t_map	*last_lst;
-
-	last_lst = lst;
-	if (!lst)
-		return (0);
-	while (lst->next)
-	{
-		last_lst = lst;
-		lst = lst->next;
-	}
-	if (!lst->next)
-		return (lst);
-	return (last_lst);
-}
-
-void	ft_lstadd_b(t_map **lst, t_map *new)
-{
-	if (!*lst)
-	{
-		*lst = new;
-		return ;
-	}
-	if (!new)
-		return ;
-	ft_lstl(*lst)->next = new;
-	new->next = 0;
-}
-
-int		ft_lst_sz(t_map *lst)
-{
-	int		count;
-	t_map	*temp;
-
-	temp = lst;
-	count = 0;
-	if (!temp)
-		return (0);
-	while (temp->next)
-	{
-		count++;
-		temp = temp->next;
-	}
-	if (temp->next == NULL)
-		count++;
-	return (count);
-}
-
-char		**map_to_matrix(t_map *lst)
+char		**map_to_matrix(t_all *lst)
 {
 	t_map	*temp;
 	int		i;
 	int		j;
 	char	**matrix;
 
-	temp = lst;
-	if (!(matrix = malloc(sizeof(char*) * (ft_lst_sz(lst) + 1))))
+	temp = lst->map;
+	if (!(matrix = malloc(sizeof(char*) * (ft_lst_sz(lst->map) + 1))))
 		return (NULL);
 	i = 0;
-	while (i < ft_lst_sz(lst))
+	while (i < ft_lst_sz(lst->map))
 	{
 		if (!(matrix[i] = malloc(sizeof(char) * (ft_strlen(temp->line) + 1))))
 			return (NULL);
@@ -240,6 +125,11 @@ char		**map_to_matrix(t_map *lst)
 		while (temp->line[j] != '\0')
 		{
 			matrix[i][j] = temp->line[j];
+      if (matrix[i][j] == 'N')
+      {
+        lst->game.gpos_x = i; 
+        lst->game.gpos_y = j;
+      }
 			j++;
 		}
 		matrix[i][j] = '\0';
@@ -252,65 +142,70 @@ char		**map_to_matrix(t_map *lst)
 int get_map(int *i, char *buf, t_all *all)
 {
   *i = *i;
-  static int a;
   ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
-  all->game.map = map_to_matrix(all->map);
-  ft_putstr_fd(all->game.map[a], 1);
-  ft_putstr_fd("\n", 1);
-  a++;
+  all->game.map = map_to_matrix(all);
   return (SUCCESS);
 }
 
-int fetch_line_file(int i, char *buf, t_all *all)
+int		close_win(t_all *all)
 {
-  int error;
-
-  error = 0;
-  while (ft_strchr(INVCHARS, buf[i]))
-    i++;
-  if (buf[i] == '1' && buf[i] != '\0')
-    error = get_map(&i, buf, all);
-  if (buf[i] == 'R' && buf[i + 1] == ' ')
-    error = get_resolution(&i ,buf , all);
-  if (buf[i] == 'N' && buf[i + 1] == 'O' && buf[i + 2] == ' ')
-    error = get_texture(&i ,buf, all, &all->tex.no);
-  if (buf[i] == 'S' && buf[i + 1] == 'O' && buf[i + 2] == ' ')
-    error = get_texture(&i ,buf, all, &all->tex.so);
-  if (buf[i] == 'E' && buf[i + 1] == 'A' && buf[i + 2] == ' ')
-    error = get_texture(&i ,buf, all, &all->tex.ea);
-  if (buf[i] == 'W' && buf[i + 1] == 'E' && buf[i + 2] == ' ')
-    error = get_texture(&i ,buf, all, &all->tex.we);
-  if (buf[i] == 'S' && buf[i + 1] == ' ')
-    error = get_texture(&i ,buf, all, &all->tex.sp);
-  if (buf[i] == 'F' && buf[i + 1] == ' ')
-    error = get_color(&i ,buf, &all->tex.floor);
-  if (buf[i] == 'C' && buf[i + 1] == ' ')
-    error = get_color(&i ,buf, &all->tex.ceil);
-  if (all->win.x && all->win.y && all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
-    error = 1;
-  
-  return ((error == 1 ? SUCCESS : error));
+	int	i;
+  all->win.win_ptr = 0;
+	i = 0;
+	// while (i < s->map.y)
+	// 	free(s->map.tab[i++]);
+	// free(s->map.tab);
+	// free(all->tex.no);
+	// free(s->tex.s);
+	// free(s->tex.e);
+	// free(s->tex.w);
+	// free(s->tex.i);
+	// if (win == 1)
+	// 	mlx_destroy_window(s->mlx.ptr, s->win.ptr);
+	// free(s->mlx.ptr);
+	exit(0);
+	return (1);
 }
 
-int file_parse(int fd, char *namefile, t_all *all, int error)
+void	move_f(t_all *all, double c)
 {
-  char *buffer;
-  
-  if ((fd = open(namefile, O_RDONLY)) == -1)
-    return (ERROR_READING_FILE);
-  while ((get_next_line(fd, &buffer)) > ERROR)
-  {
-    if ((error = fetch_line_file(0, buffer, all)) != SUCCESS)
-      return (error);
-    free(buffer);
-  }
-  if ((error = fetch_line_file(0, buffer, all)) != SUCCESS)
-      return (error);
-  free(buffer);
-  close(fd);
-  return (SUCCESS);
+  if(all->game.map[(int)(all->game.gpos_x + all->ray.ray_dir_x * c)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x += all->ray.ray_dir_x * c;
+  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y + all->ray.ray_dir_y * c)] == '0') all->game.gpos_y += all->ray.ray_dir_y * c;
+  screen_ray(all);
 }
 
+void	move_b(t_all *all, double c)
+{
+  if(all->game.map[(int)(all->game.gpos_x - all->ray.ray_dir_x * c)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x -= all->ray.ray_dir_x * c;
+  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y - all->ray.ray_dir_y * c)] == '0') all->game.gpos_y -= all->ray.ray_dir_y * c;
+  screen_ray(all);
+}
+
+void	ft_rotate(t_all *all, double c)
+{
+      double oldDirX = all->ray.dir_x;
+      all->ray.dir_x = all->ray.dir_x * cos(-c * ROTATE_S) - all->ray.dir_y * sin(-c  * ROTATE_S);
+      all->ray.dir_y = oldDirX * sin(-c  * ROTATE_S) + all->ray.dir_y * cos(-c  * ROTATE_S);
+      double oldPlaneX = all->ray.plane_x;
+      all->ray.plane_x = all->ray.plane_x * cos(-c  * ROTATE_S) - all->ray.plane_y * sin(-c  * ROTATE_S);
+      all->ray.plane_y = oldPlaneX * sin(-c  * ROTATE_S) + all->ray.plane_y * cos(-c  * ROTATE_S);
+      screen_ray(all);
+}
+
+
+int key_press(int key, t_all *all)
+{
+  
+  if (key == W)
+		move_f(all, 1);
+  if (key == S)
+		move_b(all, 1);
+  if (key == D)
+		ft_rotate(all, 1);
+  if (key == A)
+		ft_rotate(all, -1);
+    return(1);
+}
 
 int run_game(int cr_bmp, char *namefile, t_all *all)
 {
@@ -320,13 +215,19 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     if ((error = file_parse(0, namefile, all, 0)) != SUCCESS)
       return error_str(error);
     all->mlx.mlx_ptr = mlx_init();
-    all->game.gpos_x = 3;
-    all->game.gpos_y = 3;
+    all->ray.dir_x = -1;
+    all->ray.dir_y = 0;
+    all->ray.plane_x = 0;
+    all->ray.plane_y = 0.66;
+    all->ray.h = all->win.y;
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
     ft_putstr_fd("\ngame start\n", 1);
-    init_ray(all);
+    screen_ray(all);
     cr_bmp = 0;
     namefile = 0;
+    mlx_hook(all->win.win_ptr, 2, 0, key_press, all);
+    mlx_hook(all->win.win_ptr, 17, 0, close_win, all);
+    // mlx_loop_hook(all->win.win_ptr, screen_ray, all);
     mlx_loop(all->mlx.mlx_ptr);
     
     return(SUCCESS);

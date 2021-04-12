@@ -10,6 +10,17 @@
 # include <fcntl.h>
 
 # define INVCHARS "\t\v\r\f\n "
+# define ESC 53
+# define W 13
+# define A 0
+# define S 1
+# define D 2
+# define UP 126
+# define DOWN 125
+# define LEFT 123
+# define RIGHT 124
+# define SPEED 0.05
+# define ROTATE_S 0.05
 
 typedef enum s_errors
 {
@@ -104,6 +115,22 @@ typedef struct	s_ray
 	double			dir_y;
 	double			plane_x;
 	double			plane_y;
+	double 			sideDistX;
+    double 			sideDistY;
+	double 			deltaDistX;
+	double 			deltaDistY;
+	int 			sx;
+	int 			mapX;
+	int 			mapY;
+	double 			perpWallDist;
+    int				stepX;
+    int				stepY;
+    int 			side; 
+	int 			hit;
+	int 			h;
+	int 			lineHeight;
+	int 			drawStart;
+	int 			drawEnd;
 }				t_ray;
 
 typedef struct	s_hit
@@ -137,7 +164,23 @@ typedef struct s_all
 } 				t_all;
 
 
-void init_ray(t_all *all);
-void verLine(int x, int drawStart, int drawEnd, int color, t_all *all);
+int screen_ray(t_all *all);
+void verLine(int drawStart, int drawEnd, int color, t_all *all);
+int error_str(int error);
+int file_parse(int fd, char *namefile, t_all *all, int error);
+int get_resolution(int *i, char *buf, t_all *all);
+int get_texture(int *i, char *buf, t_all *all, int **addr);
+int check_full_tex(t_all *all, int **addr, char *filename_tex);
+int get_color(int *i, char *buf, unsigned int *clr);
+int get_map(int *i, char *buf, t_all *all);
+int		ft_lst_sz(t_map *lst);
+void	ft_lstadd_b(t_map **lst, t_map *new);
+t_map	*ft_lstl(t_map *lst);
+t_map	*ft_lstn(char *content);
+int error_str(int error);
+int		ft_atoi_cub(int *i, char *buf, int num);
+int get_resolution(int *i, char *buf, t_all *all);
+
+
 
 #endif

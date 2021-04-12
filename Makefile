@@ -3,7 +3,11 @@ NAME = cube3D
 SRC = 	cube3d.c \
 		gnl/get_next_line.c \
 		gnl/get_next_line_utils.c \
-		ray_casting.c
+		ray_casting.c \
+		parse.c \
+		utils_list.c \
+		print_error.c \
+		get_file_args.c
 
 
 
