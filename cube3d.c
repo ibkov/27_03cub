@@ -169,15 +169,16 @@ int		close_win(t_all *all)
 
 void	move_f(t_all *all, double c)
 {
-  if(all->game.map[(int)(all->game.gpos_x + all->ray.ray_dir_x * c)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x += all->ray.ray_dir_x * c;
-  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y + all->ray.ray_dir_y * c)] == '0') all->game.gpos_y += all->ray.ray_dir_y * c;
+  c = 0.2;
+  if(all->game.map[(int)(all->game.gpos_x + all->ray.dir_x)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x += all->ray.dir_x;
+  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y + all->ray.dir_y)] == '0') all->game.gpos_y += all->ray.dir_y;
   screen_ray(all);
 }
 
 void	move_b(t_all *all, double c)
 {
-  if(all->game.map[(int)(all->game.gpos_x - all->ray.ray_dir_x * c)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x -= all->ray.ray_dir_x * c;
-  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y - all->ray.ray_dir_y * c)] == '0') all->game.gpos_y -= all->ray.ray_dir_y * c;
+  if(all->game.map[(int)(all->game.gpos_x - all->ray.dir_x * c)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x -= all->ray.dir_x * c;
+  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y - all->ray.dir_y * c)] == '0') all->game.gpos_y -= all->ray.dir_y * c;
   screen_ray(all);
 }
 
