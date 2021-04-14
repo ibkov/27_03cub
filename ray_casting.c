@@ -29,6 +29,34 @@ void init_ray(t_all *all)
     all->img.addr = (int *)mlx_get_data_addr(all->img.img_ptr, &all->img.bits_per_pixel, &all->img.line_length, &all->img.endian);
 }
 
+// void calculate_txtr_pos(t_all *all)
+// {
+// 	all->ray.drawStart = -all->ray.lineHeight / 2 + all->win.x / 2;
+// 	if(all->ray.drawStart < 0)
+// 		all->ray.drawStart = 0;
+// 	all->ray.drawEnd = all->ray.lineHeight / 2 + all->win.x / 2;
+// 	if(all->ray.drawEnd >= all->win.x)
+// 		all->ray.drawEnd = all->win.x - 1;
+// 	if (all->ray.side == 0)
+// 		all->txtr.wallX = game->player.posY + game->player.to_wall * rayDirY;
+// 	else
+// 		game->txtr.wallX = game->player.posX + game->player.to_wall * rayDirX;
+// 	game->txtr.wallX -= floor(game->txtr.wallX);
+// 	game->txtr.texX = (int)(game->txtr.wallX * (double)texWidth);
+// 	game->txtr.step = 1.0 * texHeight / game->ray.lineHeight;
+// 	game->txtr.texPos = (game->ray.drawStart - game->mlx.win_hight / 2.0 + \
+// 		game->ray.lineHeight / 2.0) * game->txtr.step;
+// 	while(game->ray.drawStart < game->ray.drawEnd)
+// 	{
+// 		game->txtr.texY = (int)game->txtr.texPos & (texHeight - 1);
+// 		game->txtr.texPos += game->txtr.step;
+// 		game->txtr.color = ft_get_pxl_clr(game->txtr.current, game->txtr.texX, game->txtr.texY);
+// 		my_mlx_pixel_put(game->data, x, game->ray.drawStart, game->txtr.color);
+// 		game->ray.drawStart++;
+// 	}
+// }
+
+
 void calc_step(t_all *all)
 {
     if(all->ray.ray_dir_x < 0)
@@ -111,6 +139,7 @@ int screen_ray(t_all *all)
         calc_dda(all);
         calc_walls_fc(all);
         draw_walls(all);
+
         all->ray.sx++;
     }
     mlx_put_image_to_window(all->mlx.mlx_ptr, all->win.win_ptr, all->img.img_ptr, 0, 0);

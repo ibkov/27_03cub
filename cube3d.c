@@ -17,7 +17,6 @@ int check_full_tex(t_all *all, int **addr, char *filename_tex)
   *addr = (int *)mlx_get_data_addr(img, &array[2], &array[3], &array[4]);
   free(img);
   return(SUCCESS);
-
 }
 
 int get_texture(int *i, char *buf, t_all *all, int **addr)
@@ -169,9 +168,9 @@ int		close_win(t_all *all)
 
 void	move_f(t_all *all, double c)
 {
-  c = 0.2;
-  if(all->game.map[(int)(all->game.gpos_x + all->ray.dir_x)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x += all->ray.dir_x;
-  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y + all->ray.dir_y)] == '0') all->game.gpos_y += all->ray.dir_y;
+  printf("x - %d, y - %d %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
+  if(all->game.map[(int)(all->game.gpos_x + all->ray.dir_x * c)][(int)(all->game.gpos_y)] != '1') all->game.gpos_x += all->ray.dir_x * c;
+  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y + all->ray.dir_y * c)] != '1') all->game.gpos_y += all->ray.dir_y * c;
   screen_ray(all);
 }
 
@@ -182,14 +181,29 @@ void	move_b(t_all *all, double c)
   screen_ray(all);
 }
 
-void	ft_rotate(t_all *all, double c)
+void	ft_rotate_l(t_all *all, double c)
 {
+  c = 0.04;
+    printf("x - %d, y - %d %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
       double oldDirX = all->ray.dir_x;
-      all->ray.dir_x = all->ray.dir_x * cos(-c * ROTATE_S) - all->ray.dir_y * sin(-c  * ROTATE_S);
-      all->ray.dir_y = oldDirX * sin(-c  * ROTATE_S) + all->ray.dir_y * cos(-c  * ROTATE_S);
+      all->ray.dir_x = all->ray.dir_x * cos(c) - all->ray.dir_y * sin(c);
+      all->ray.dir_y = oldDirX * sin(c) + all->ray.dir_y * cos(c);
       double oldPlaneX = all->ray.plane_x;
-      all->ray.plane_x = all->ray.plane_x * cos(-c  * ROTATE_S) - all->ray.plane_y * sin(-c  * ROTATE_S);
-      all->ray.plane_y = oldPlaneX * sin(-c  * ROTATE_S) + all->ray.plane_y * cos(-c  * ROTATE_S);
+      all->ray.plane_x = all->ray.plane_x * cos(c) - all->ray.plane_y * sin(c);
+      all->ray.plane_y = oldPlaneX * sin(c) + all->ray.plane_y * cos(c);
+      screen_ray(all);
+}
+
+void	ft_rotate_r(t_all *all, double c)
+{
+  c = 0.04;
+    printf("x - %d, y - %d %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
+      double oldDirX = all->ray.dir_x;
+      all->ray.dir_x = all->ray.dir_x * cos(-c) - all->ray.dir_y * sin(-c);
+      all->ray.dir_y = oldDirX * sin(-c) + all->ray.dir_y * cos(-c);
+      double oldPlaneX = all->ray.plane_x;
+      all->ray.plane_x = all->ray.plane_x * cos(-c) - all->ray.plane_y * sin(-c);
+      all->ray.plane_y = oldPlaneX * sin(-c) + all->ray.plane_y * cos(-c);
       screen_ray(all);
 }
 
@@ -200,11 +214,11 @@ int key_press(int key, t_all *all)
   if (key == W)
 		move_f(all, 1);
   if (key == S)
-		move_b(all, 1);
+		move_f(all, -1);
   if (key == D)
-		ft_rotate(all, 1);
+		ft_rotate_r(all, 1);
   if (key == A)
-		ft_rotate(all, -1);
+		ft_rotate_l(all, 1);
     return(1);
 }
 
