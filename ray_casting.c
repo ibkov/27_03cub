@@ -103,7 +103,7 @@ void calc_dda(t_all *all)
 
 void calc_walls_fc(t_all *all)
 {
-    if(all->ray.side == 0) all->ray.perpWallDist = (all->ray.mapX - all->game.gpos_x + (1 - all->ray.stepX) / 2) / all->ray.ray_dir_x;
+        if(all->ray.side == 0) all->ray.perpWallDist = (all->ray.mapX - all->game.gpos_x + (1 - all->ray.stepX) / 2) / all->ray.ray_dir_x;
         else all->ray.perpWallDist = (all->ray.mapY - all->game.gpos_y + (1 - all->ray.stepY) / 2) / all->ray.ray_dir_y;
         verLine(0, (int)all->ray.h / 2, all->tex.floor, all);
         verLine((int)all->ray.h / 2, all->ray.h - 1, all->tex.ceil, all);
@@ -112,6 +112,39 @@ void calc_walls_fc(t_all *all)
         if(all->ray.drawStart < 0)all->ray.drawStart = 0;
         all->ray.drawEnd = all->ray.lineHeight / 2 + all->ray.h / 2;
         if(all->ray.drawEnd >= all->ray.h)all->ray.drawEnd = all->ray.h - 1;
+}
+
+void calc_texture(t_all *all)
+{
+    //texturing calculations
+    //   int texNum = all->game.map[all->game.map_x][all->game.map_y] - 1; //1 subtracted from it so that texture 0 can be used!
+
+      //calculate value of wallX
+      double wallX; //where exactly the wall was hit
+      if (all->ray.side == 0) 
+        wallX = all->game.gpos_y + all->ray.perpWallDist * all->ray.ray_dir_x;
+      else           
+        wallX = all->game.gpos_x + all->ray.perpWallDist * all->ray.ray_dir_x;
+      wallX -= floor((wallX));
+
+      //x coordinate on the texture
+      int texX = (int)(wallX * (double)(64));
+      if(all->ray.side == 0 && all->ray.ray_dir_x > 0) texX = 64 - texX - 1;
+      if(all->ray.side == 1 && all->ray.ray_dir_y < 0) texX = 64 - texX - 1;
+
+      double step = 1.0 * 64 / all->ray.lineHeight;
+      // Starting texture coordinate
+      double texPos = (all->ray.drawStart - all->win.x / 2 + all->ray.lineHeight / 2) * step;
+      for(int y = all->ray.drawStart; y < all->ray.drawEnd; y++)
+      {
+        // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+        int texY = (int)texPos & (64 - 1);
+        texPos += step;
+        unsigned int color = all->tex.no[64 * texY + texX];
+        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+        // if(all->ray.side == 1) color = (color >> 1) & 8355711;
+        // buffer[y][sx] = color;
+      }
 }
 
 void draw_walls(t_all *all)

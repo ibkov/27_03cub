@@ -14,6 +14,7 @@
 // Enable parameter hints
 "editor.parameterHints": true,
 "files.associations": {
-  "__locale": "c"
+  "__locale": "c",
+  "cstdio": "c"
 }
   }
