@@ -27,7 +27,8 @@ void init_ray(t_all *all)
     all->ray.sx = 0;
     for (int y = 0; y < all->win.y; y++)
         for (int x = 0; x < all->win.x; x++) 
-            all->tex.buf[y][x] = 0;
+            if (y < all->win.y / 2)all->tex.buf[y][x] = all->tex.ceil;
+            else all->tex.buf[y][x] = all->tex.floor;
     all->img.img_ptr = mlx_new_image(all->mlx.mlx_ptr, all->win.x, all->win.y);
     all->img.addr = (int *)mlx_get_data_addr(all->img.img_ptr, &all->img.bits_per_pixel, &all->img.line_length, &all->img.endian);
 }
@@ -73,7 +74,7 @@ void calc_dda(t_all *all)
             all->ray.mapY += all->ray.stepY;
             all->ray.side = 1;
             }
-            if(all->game.map[all->ray.mapX][all->ray.mapY] != '0') all->ray.hit = 1;
+            if(all->game.map[all->ray.mapX][all->ray.mapY] == '1') all->ray.hit = 1;
         }
 }
 
@@ -81,8 +82,8 @@ void calc_walls_fc(t_all *all)
 {
         if(all->ray.side == 0) all->ray.perpWallDist = (all->ray.mapX - all->game.gpos_x + (1 - all->ray.stepX) / 2) / all->ray.ray_dir_x;
         else all->ray.perpWallDist = (all->ray.mapY - all->game.gpos_y + (1 - all->ray.stepY) / 2) / all->ray.ray_dir_y;
-        verLine(0, (int)all->ray.h / 2, all->tex.floor, all);
-        verLine((int)all->ray.h / 2, all->ray.h - 1, all->tex.ceil, all);
+        // verLine(0, (int)all->ray.h / 2, all->tex.floor, all);
+        // verLine((int)all->ray.h / 2, all->ray.h - 1, all->tex.ceil, all);
         all->ray.lineHeight = (int)(all->ray.h / all->ray.perpWallDist);
         all->ray.drawStart = -all->ray.lineHeight / 2 + all->ray.h / 2;
         if(all->ray.drawStart < 0)all->ray.drawStart = 0;
@@ -123,9 +124,9 @@ void calc_texture(t_all *all)
         // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
         int texY = (int)texPos & (64 - 1);
         texPos += step;
-        unsigned int color = all->tex.we[64 * texY + texX];
+        int color = all->tex.we[64 * texY + texX];
         //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-        if(all->ray.side == '1') color = (color >> 1) & 8355711;
+        if(all->ray.side == 1) color = (color >> 1) & 8355711;
         all->tex.buf[y][all->ray.sx] = color;
       }
 }
