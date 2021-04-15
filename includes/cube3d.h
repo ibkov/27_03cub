@@ -78,6 +78,7 @@ typedef struct s_tex
 	int 	*ea;
 	int 	*we;
 	int 	*sp;
+	int 	**buf;
 	unsigned int 	ceil;
 	unsigned int 	floor;
 	int 	fd;

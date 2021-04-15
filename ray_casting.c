@@ -25,36 +25,12 @@ void calul_ray(t_all *all)
 void init_ray(t_all *all)
 {
     all->ray.sx = 0;
+    for (int y = 0; y < all->win.y; y++)
+        for (int x = 0; x < all->win.x; x++) 
+            all->tex.buf[y][x] = 0;
     all->img.img_ptr = mlx_new_image(all->mlx.mlx_ptr, all->win.x, all->win.y);
     all->img.addr = (int *)mlx_get_data_addr(all->img.img_ptr, &all->img.bits_per_pixel, &all->img.line_length, &all->img.endian);
 }
-
-// void calculate_txtr_pos(t_all *all)
-// {
-// 	all->ray.drawStart = -all->ray.lineHeight / 2 + all->win.x / 2;
-// 	if(all->ray.drawStart < 0)
-// 		all->ray.drawStart = 0;
-// 	all->ray.drawEnd = all->ray.lineHeight / 2 + all->win.x / 2;
-// 	if(all->ray.drawEnd >= all->win.x)
-// 		all->ray.drawEnd = all->win.x - 1;
-// 	if (all->ray.side == 0)
-// 		all->txtr.wallX = game->player.posY + game->player.to_wall * rayDirY;
-// 	else
-// 		game->txtr.wallX = game->player.posX + game->player.to_wall * rayDirX;
-// 	game->txtr.wallX -= floor(game->txtr.wallX);
-// 	game->txtr.texX = (int)(game->txtr.wallX * (double)texWidth);
-// 	game->txtr.step = 1.0 * texHeight / game->ray.lineHeight;
-// 	game->txtr.texPos = (game->ray.drawStart - game->mlx.win_hight / 2.0 + \
-// 		game->ray.lineHeight / 2.0) * game->txtr.step;
-// 	while(game->ray.drawStart < game->ray.drawEnd)
-// 	{
-// 		game->txtr.texY = (int)game->txtr.texPos & (texHeight - 1);
-// 		game->txtr.texPos += game->txtr.step;
-// 		game->txtr.color = ft_get_pxl_clr(game->txtr.current, game->txtr.texX, game->txtr.texY);
-// 		my_mlx_pixel_put(game->data, x, game->ray.drawStart, game->txtr.color);
-// 		game->ray.drawStart++;
-// 	}
-// }
 
 
 void calc_step(t_all *all)
@@ -114,6 +90,13 @@ void calc_walls_fc(t_all *all)
         if(all->ray.drawEnd >= all->ray.h)all->ray.drawEnd = all->ray.h - 1;
 }
 
+void imageDraw(t_all *all)
+{
+    for (int y = 0; y < all->win.y; y++)
+        for (int x = 0; x < all->win.x; x++)
+            all->img.addr[y * all->win.x + x] = all->tex.buf[y][x];
+}
+
 void calc_texture(t_all *all)
 {
     //texturing calculations
@@ -122,28 +105,28 @@ void calc_texture(t_all *all)
       //calculate value of wallX
       double wallX; //where exactly the wall was hit
       if (all->ray.side == 0) 
-        wallX = all->game.gpos_y + all->ray.perpWallDist * all->ray.ray_dir_x;
+        wallX = all->game.gpos_y + all->ray.perpWallDist * all->ray.ray_dir_y;
       else           
         wallX = all->game.gpos_x + all->ray.perpWallDist * all->ray.ray_dir_x;
       wallX -= floor((wallX));
 
-      //x coordinate on the texture
+    //   x coordinate on the texture
       int texX = (int)(wallX * (double)(64));
       if(all->ray.side == 0 && all->ray.ray_dir_x > 0) texX = 64 - texX - 1;
       if(all->ray.side == 1 && all->ray.ray_dir_y < 0) texX = 64 - texX - 1;
 
       double step = 1.0 * 64 / all->ray.lineHeight;
       // Starting texture coordinate
-      double texPos = (all->ray.drawStart - all->win.x / 2 + all->ray.lineHeight / 2) * step;
+      double texPos = (all->ray.drawStart - all->win.y / 2 + all->ray.lineHeight / 2) * step;
       for(int y = all->ray.drawStart; y < all->ray.drawEnd; y++)
       {
         // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
         int texY = (int)texPos & (64 - 1);
         texPos += step;
-        unsigned int color = all->tex.no[64 * texY + texX];
+        unsigned int color = all->tex.we[64 * texY + texX];
         //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-        // if(all->ray.side == 1) color = (color >> 1) & 8355711;
-        // buffer[y][sx] = color;
+        if(all->ray.side == '1') color = (color >> 1) & 8355711;
+        all->tex.buf[y][all->ray.sx] = color;
       }
 }
 
@@ -171,8 +154,9 @@ int screen_ray(t_all *all)
         calc_step(all);
         calc_dda(all);
         calc_walls_fc(all);
-        draw_walls(all);
-
+        // draw_walls(all);
+        calc_texture(all);
+        imageDraw(all);
         all->ray.sx++;
     }
     mlx_put_image_to_window(all->mlx.mlx_ptr, all->win.win_ptr, all->img.img_ptr, 0, 0);

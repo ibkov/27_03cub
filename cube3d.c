@@ -235,9 +235,17 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     all->ray.plane_x = 0;
     all->ray.plane_y = 0.66;
     all->ray.h = all->win.y;
+    all->tex.buf = (int **)malloc(sizeof(int *) * all->win.y);
+    for (int i = 0; i < all->win.y; i++)
+        all->tex.buf[i] = (int *)malloc(sizeof(int) * all->win.x);
+    for (int i = 0; i < all->win.y; i++)
+        for (int j = 0; j < all->win.x; j++)
+            all->tex.buf[i][j] = 0;
+
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
     ft_putstr_fd("\ngame start\n", 1);
     screen_ray(all);
+    printf("%d", all->tex.no[0]);
     cr_bmp = 0;
     namefile = 0;
     mlx_hook(all->win.win_ptr, 2, 0, key_press, all);
