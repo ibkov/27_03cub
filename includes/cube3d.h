@@ -78,7 +78,6 @@ typedef struct s_tex
 	int 	*ea;
 	int 	*we;
 	int 	*sp;
-	int 	**buf;
 	unsigned int 	ceil;
 	unsigned int 	floor;
 	int 	fd;
@@ -107,6 +106,7 @@ typedef struct 	s_color
 }				t_color;
 
 
+
 typedef struct	s_ray
 {
 	double			camera_x;
@@ -132,6 +132,12 @@ typedef struct	s_ray
 	int 			lineHeight;
 	int 			drawStart;
 	int 			drawEnd;
+	double 			wallX;
+    int 			texX;
+    double 			step;
+    double 			texPos;
+    int 			texY;
+    int 			color;
 }				t_ray;
 
 typedef struct	s_hit
@@ -181,7 +187,8 @@ t_map	*ft_lstn(char *content);
 int error_str(int error);
 int		ft_atoi_cub(int *i, char *buf, int num);
 int get_resolution(int *i, char *buf, t_all *all);
-
-
+void verLine(int drawStart, int drawEnd, int color, t_all *all);
+void draw_walls(t_all *all);
+void calc_texture(t_all *all);
 
 #endif

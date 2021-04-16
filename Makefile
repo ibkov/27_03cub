@@ -7,7 +7,8 @@ SRC = 	cube3d.c \
 		parse.c \
 		utils_list.c \
 		print_error.c \
-		get_file_args.c
+		get_file_args.c \
+		utils_ray.c
 
 
 
