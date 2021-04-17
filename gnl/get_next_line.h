@@ -22,6 +22,6 @@
 int		get_next_line(int fd, char **line);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *string, int symbol);
-int		ft_strlen(const char *str);
+int		ft_strlen_gnl(const char *str);
 
 #endif

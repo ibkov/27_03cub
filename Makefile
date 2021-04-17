@@ -8,7 +8,8 @@ SRC = 	cube3d.c \
 		utils_list.c \
 		print_error.c \
 		get_file_args.c \
-		utils_ray.c
+		utils_ray.c \
+		key_press.c
 
 
 
@@ -27,7 +28,7 @@ $(NAME): $(OBJ)
 clean:
 		make -C minilibx clean
 		make -C libft clean
-		rm -rf $(OBJ) libft.a libmlx.a
+		rm -rf $(OBJ) gnl/$(OBJ) libft.a libmlx.a
 
 fclean: clean
 		make -C minilibx clean

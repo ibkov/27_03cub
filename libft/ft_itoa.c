@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int			ft_intlen(int num)
+int	ft_intlen(int num)
 {
 	int	count;
 
@@ -40,7 +40,7 @@ int			ft_intlen(int num)
 	return (count);
 }
 
-char		*collect_str(int n, char *str_num, int i)
+char	*collect_str(int n, char *str_num, int i)
 {
 	while (n > 0)
 	{
@@ -51,13 +51,14 @@ char		*collect_str(int n, char *str_num, int i)
 	return (str_num);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*str_num;
 	int		i;
 
 	i = ft_intlen(n);
-	if (!(str_num = (char*)malloc(sizeof(char) * i + 1)))
+	str_num = (char *)malloc(sizeof(char) * i + 1);
+	if (!str_num)
 		return (0);
 	str_num[i--] = '\0';
 	if (n == -2147483648)

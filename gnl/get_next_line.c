@@ -35,7 +35,7 @@ char	*ft_check_last(char *last)
 		free_memory(last, 0);
 		return (0);
 	}
-	if (!(clear = malloc(sizeof(char) * ((ft_strlen(last) - i) + 1))))
+	if (!(clear = malloc(sizeof(char) * ((ft_strlen_gnl(last) - i) + 1))))
 		return (0);
 	i++;
 	while (last[i])

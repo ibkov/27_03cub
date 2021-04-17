@@ -6,7 +6,7 @@
 /*   By: burswyck <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 17:54:15 by burswyck          #+#    #+#             */
-/*   Updated: 2020/12/08 22:51:43 by burswyck         ###   ########.fr       */
+/*   Updated: 2021/04/17 13:27:10 by burswyck         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 
 	if (!dst && !src)
 		return (0);
-	d = (unsigned char*)dst;
-	s = (unsigned char*)src;
+	d = (unsigned char *)dst;
+	s = (unsigned char *)src;
 	if (d < s)
 	{
 		while (len--)
@@ -43,11 +43,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 && !s2)
 		return (0);
-	len_all_str = ft_strlen(s1) + ft_strlen(s2);
+	len_all_str = ft_strlen_gnl(s1) + ft_strlen_gnl(s2);
 	if (!(str_joined = malloc(sizeof(str_joined) * (len_all_str) + 1)))
 		return (0);
-	ft_memmove(str_joined, s1, ft_strlen(s1));
-	ft_memmove(str_joined + ft_strlen(s1), s2, ft_strlen(s2));
+	ft_memmove(str_joined, s1, ft_strlen_gnl(s1));
+	ft_memmove(str_joined + ft_strlen_gnl(s1), s2, ft_strlen_gnl(s2));
 	str_joined[len_all_str] = '\0';
 	free((char *)s1);
 	return (str_joined);
@@ -62,13 +62,13 @@ char	*ft_strchr(const char *string, int symbol)
 		string++;
 	}
 	if (symbol == '\0')
-		return ((char*)string);
+		return ((char *)string);
 	if (*string == '\0')
 		return (0);
-	return ((char*)string);
+	return ((char *)string);
 }
 
-int		ft_strlen(const char *str)
+int	ft_strlen_gnl(const char *str)
 {
 	int		i;
 

@@ -1,50 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cube3d.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: burswyck <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/17 13:20:12 by burswyck          #+#    #+#             */
+/*   Updated: 2021/04/17 13:20:25 by burswyck         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./includes/cube3d.h"
-
-
-int check_full_tex(t_all *all, int **addr, char *filename_tex)
-{
-  void *img;
-  int array[5];
-
-  if (!(ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xmp", 4)))
-    return (ERROR_TEXTUTE_EX);
-  if ((all->tex.fd = open(filename_tex, O_RDONLY)) == -1)
-    return (ERROR_TEXTUTE_FILE);
-  close(all->tex.fd);
-  img = mlx_xpm_file_to_image(&all->mlx.mlx_ptr, filename_tex, &array[0], &array[1]);
-  if (array[0] != 64 || array[1] != 64 || !img)
-    return (ERROR);
-  *addr = (int *)mlx_get_data_addr(img, &array[2], &array[3], &array[4]);
-  free(img);
-  return(SUCCESS);
-}
-
-int get_texture(int *i, char *buf, t_all *all, int **addr)
-{
-  int rem;
-  char *filename_tex;
-  int error;
-
-  error = 0;
-  if (*addr != NULL)
-		return (ERROR);
-  (*i) += 2;
-  while (ft_strchr(INVCHARS, buf[(*i)]))
-    (*i)++;
-  rem = (*i);
-  while (!ft_strchr(INVCHARS, buf[(*i)]))
-    (*i)++;
-  if (!(filename_tex = (char*)malloc(sizeof(char) * (*i - rem + 1))))
-    return (ERROR_MALLOC);
-  *i = rem;
-  rem = 0;
-  while(buf[*i] != ' ' && buf[*i] != '\0')
-    filename_tex[rem++] = buf[(*i)++];
-  filename_tex[rem] = '\0';
-  error = check_full_tex(all, addr, filename_tex);
-  free(filename_tex);
-  return (error);
-}
 
 int get_color(int *i, char *buf, unsigned int *clr)
 {
@@ -144,91 +110,6 @@ int get_map(int *i, char *buf, t_all *all)
   ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
   all->game.map = map_to_matrix(all);
   return (SUCCESS);
-}
-
-int		close_win(t_all *all)
-{
-	int	i;
-  all->win.win_ptr = 0;
-	i = 0;
-	// while (i < s->map.y)
-	// 	free(s->map.tab[i++]);
-	// free(s->map.tab);
-	// free(all->tex.no);
-	// free(s->tex.s);
-	// free(s->tex.e);
-	// free(s->tex.w);
-	// free(s->tex.i);
-	// if (win == 1)
-	// 	mlx_destroy_window(s->mlx.ptr, s->win.ptr);
-	// free(s->mlx.ptr);
-	exit(0);
-	return (1);
-}
-
-void	move(t_all *all, double c)
-{
-  double r = 0.4;
-  if(all->game.map[(int)(all->game.gpos_x - all->ray.dir_x * c * r)][(int)(all->game.gpos_y)] != '1') all->game.gpos_x -= all->ray.dir_x * c  * r;
-  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y - all->ray.dir_y * c  * r)] != '1') all->game.gpos_y -= all->ray.dir_y * c  * r;
-  screen_ray(all);
-}
-
-void	ft_rotate_l(t_all *all, double c)
-{
-  c = 0.04;
-    printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
-      double oldDirX = all->ray.dir_x;
-      all->ray.dir_x = all->ray.dir_x * cos(c) - all->ray.dir_y * sin(c);
-      all->ray.dir_y = oldDirX * sin(c) + all->ray.dir_y * cos(c);
-      double oldPlaneX = all->ray.plane_x;
-      all->ray.plane_x = all->ray.plane_x * cos(c) - all->ray.plane_y * sin(c);
-      all->ray.plane_y = oldPlaneX * sin(c) + all->ray.plane_y * cos(c);
-      screen_ray(all);
-}
-
-void	ft_rotate_r(t_all *all, double c)
-{
-  c = 0.04;
-    printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
-      double oldDirX = all->ray.dir_x;
-      all->ray.dir_x = all->ray.dir_x * cos(-c) - all->ray.dir_y * sin(-c);
-      all->ray.dir_y = oldDirX * sin(-c) + all->ray.dir_y * cos(-c);
-      double oldPlaneX = all->ray.plane_x;
-      all->ray.plane_x = all->ray.plane_x * cos(-c) - all->ray.plane_y * sin(-c);
-      all->ray.plane_y = oldPlaneX * sin(-c) + all->ray.plane_y * cos(-c);
-      screen_ray(all);
-}
-
-void ft_lr_move(t_all *all, double c)
-{
-  printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
-  all->game.gpos_x -= c * (all->ray.dir_y);
-	if (all->game.map[(int)floor(all->game.gpos_y)][(int)floor(all->game.gpos_x)] == '1')
-		all->game.gpos_x += c * (all->ray.dir_y * SPEED / 100);
-	all->game.gpos_y += c * (all->ray.dir_x * SPEED / 100);
-	if (all->game.map[(int)floor(all->game.gpos_y)][(int)floor(all->game.gpos_x)] == '1')
-		all->game.gpos_y -= c * (all->ray.dir_x * SPEED / 100);
-    screen_ray(all);
-}
-
-
-int key_press(int key, t_all *all)
-{
-  
-  if (key == W)
-		move(all, -1);
-  if (key == S)
-		move(all, 1);
-  if (key == RIGHT)
-		ft_rotate_r(all, 1);
-  if (key == LEFT)
-		ft_rotate_l(all, 1);
-  if (key == D)
-		ft_lr_move(all, 1);
-  if (key == A)
-		ft_lr_move(all, 1);
-    return(1);
 }
 
 int run_game(int cr_bmp, char *namefile, t_all *all)

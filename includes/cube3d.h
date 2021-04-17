@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cube3d.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: burswyck <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/17 13:23:28 by burswyck          #+#    #+#             */
+/*   Updated: 2021/04/17 13:23:30 by burswyck         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUBE3D_H
 # define CUBE3D_H
 
@@ -19,8 +31,8 @@
 # define DOWN 125
 # define LEFT 123
 # define RIGHT 124
-# define SPEED 1
-# define ROTATE_S 0.05
+# define SPEED 0.4
+# define ROTATE_S 0.04
 
 typedef enum s_errors
 {
@@ -190,5 +202,9 @@ int get_resolution(int *i, char *buf, t_all *all);
 void verLine(int drawStart, int drawEnd, int color, t_all *all);
 void draw_walls(t_all *all);
 void calc_texture(t_all *all);
+int key_press(int key, t_all *all);
+int get_texture(int *i, char *buf, t_all *all, int **addr);
+int		close_win(t_all *all);
+
 
 #endif
