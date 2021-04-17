@@ -19,7 +19,7 @@
 # define DOWN 125
 # define LEFT 123
 # define RIGHT 124
-# define SPEED 0.05
+# define SPEED 1
 # define ROTATE_S 0.05
 
 typedef enum s_errors
@@ -88,8 +88,8 @@ typedef struct s_game
 	char	**map;
 	int		map_x;
 	int 	map_y;
-	int 	gpos_x;
-	int		gpos_y;
+	double 	gpos_x;
+	double	gpos_y;
 }				t_game;
 
 typedef struct				s_map

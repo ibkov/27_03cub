@@ -166,25 +166,18 @@ int		close_win(t_all *all)
 	return (1);
 }
 
-void	move_f(t_all *all, double c)
+void	move(t_all *all, double c)
 {
-  printf("x - %d, y - %d %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
-  if(all->game.map[(int)(all->game.gpos_x + all->ray.dir_x * c)][(int)(all->game.gpos_y)] != '1') all->game.gpos_x += all->ray.dir_x * c;
-  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y + all->ray.dir_y * c)] != '1') all->game.gpos_y += all->ray.dir_y * c;
-  screen_ray(all);
-}
-
-void	move_b(t_all *all, double c)
-{
-  if(all->game.map[(int)(all->game.gpos_x - all->ray.dir_x * c)][(int)(all->game.gpos_y)] == '0') all->game.gpos_x -= all->ray.dir_x * c;
-  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y - all->ray.dir_y * c)] == '0') all->game.gpos_y -= all->ray.dir_y * c;
+  double r = 0.4;
+  if(all->game.map[(int)(all->game.gpos_x - all->ray.dir_x * c * r)][(int)(all->game.gpos_y)] != '1') all->game.gpos_x -= all->ray.dir_x * c  * r;
+  if(all->game.map[(int)(all->game.gpos_x)][(int)(all->game.gpos_y - all->ray.dir_y * c  * r)] != '1') all->game.gpos_y -= all->ray.dir_y * c  * r;
   screen_ray(all);
 }
 
 void	ft_rotate_l(t_all *all, double c)
 {
   c = 0.04;
-    printf("x - %d, y - %d %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
+    printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
       double oldDirX = all->ray.dir_x;
       all->ray.dir_x = all->ray.dir_x * cos(c) - all->ray.dir_y * sin(c);
       all->ray.dir_y = oldDirX * sin(c) + all->ray.dir_y * cos(c);
@@ -197,7 +190,7 @@ void	ft_rotate_l(t_all *all, double c)
 void	ft_rotate_r(t_all *all, double c)
 {
   c = 0.04;
-    printf("x - %d, y - %d %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
+    printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
       double oldDirX = all->ray.dir_x;
       all->ray.dir_x = all->ray.dir_x * cos(-c) - all->ray.dir_y * sin(-c);
       all->ray.dir_y = oldDirX * sin(-c) + all->ray.dir_y * cos(-c);
@@ -207,18 +200,34 @@ void	ft_rotate_r(t_all *all, double c)
       screen_ray(all);
 }
 
+void ft_lr_move(t_all *all, double c)
+{
+  printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
+  all->game.gpos_x -= c * (all->ray.dir_y);
+	if (all->game.map[(int)floor(all->game.gpos_y)][(int)floor(all->game.gpos_x)] == '1')
+		all->game.gpos_x += c * (all->ray.dir_y * SPEED / 100);
+	all->game.gpos_y += c * (all->ray.dir_x * SPEED / 100);
+	if (all->game.map[(int)floor(all->game.gpos_y)][(int)floor(all->game.gpos_x)] == '1')
+		all->game.gpos_y -= c * (all->ray.dir_x * SPEED / 100);
+    screen_ray(all);
+}
+
 
 int key_press(int key, t_all *all)
 {
   
   if (key == W)
-		move_f(all, 1);
+		move(all, -1);
   if (key == S)
-		move_f(all, -1);
-  if (key == D)
+		move(all, 1);
+  if (key == RIGHT)
 		ft_rotate_r(all, 1);
-  if (key == A)
+  if (key == LEFT)
 		ft_rotate_l(all, 1);
+  if (key == D)
+		ft_lr_move(all, 1);
+  if (key == A)
+		ft_lr_move(all, 1);
     return(1);
 }
 

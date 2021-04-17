@@ -26,10 +26,12 @@ $(NAME): $(OBJ)
 
 clean:
 		make -C minilibx clean
+		make -C libft clean
 		rm -rf $(OBJ) libft.a libmlx.a
 
 fclean: clean
 		make -C minilibx clean
+		make -C libft clean
 		rm -rf $(NAME)
 
 re : fclean all
