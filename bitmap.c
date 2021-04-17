@@ -16,7 +16,7 @@ void	ft_bdata(t_all *all, int fd)
 {
 	int				i;
 	int				j;
-	unsigned char	buffer[4];
+	unsigned char	buf[4];
 
 	i = all->win.x * (all->win.y - 1);
 	while (i >= 0)
@@ -24,11 +24,11 @@ void	ft_bdata(t_all *all, int fd)
 		j = 0;
 		while (j < all->win.x)
 		{
-			buffer[0] = (unsigned char)(all->img.addr[i] % 256);
-			buffer[1] = (unsigned char)(all->img.addr[i] / 256 % 256);
-			buffer[2] = (unsigned char)(all->img.addr[i] / 256 / 256 % 256);
-			buffer[3] = (unsigned char)(0);
-			write(fd, buffer, 4);
+			buf[0] = (unsigned char)(all->img.addr[i] % 256);
+			buf[1] = (unsigned char)(all->img.addr[i] / 256 % 256);
+			buf[2] = (unsigned char)(all->img.addr[i] / 256 / 256 % 256);
+			buf[3] = (unsigned char)(0);
+			write(fd, buf, 4);
 			i++;
 			j++;
 		}

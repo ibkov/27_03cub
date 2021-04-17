@@ -1,11 +1,11 @@
 R 800 600
-NO  ./textures/WALL68.xpm
+NO ./textures/WALL68.xpm
 SO ./textures/WALL68.xpm
 WE ./textures/WALL68.xpm
 EA ./textures/WALL68.xpm
 S ./textures/WALL68.xpm
 
-F 125, 200, 124
+F 125, 200, 124 sdfsd
 C 173, 216, 230
 
 111111111111111

@@ -12,11 +12,11 @@
 
 #include "./includes/cube3d.h"
 
-int get_color(int *i, char *buf, unsigned int *clr)
+int get_color(int *i, char *buf, unsigned int *color)
 {
   t_color rgb;
   ft_bzero(&rgb, sizeof(t_color));
-  if (*clr != 0xFF000000)
+  if (*color != 0xFF000000)
     return (ERROR);
   (*i)++;
   rgb.r = ft_atoi_cub(i, buf, 0);
@@ -28,7 +28,7 @@ int get_color(int *i, char *buf, unsigned int *clr)
     (*i)++;
   if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.r > 255)
     return (ERROR);
-  *clr = rgb.r * 256 * 256 + rgb.g * 256 + rgb.b;
+  *color = rgb.r * 256 * 256 + rgb.g * 256 + rgb.b;
   return (SUCCESS);
 }
 

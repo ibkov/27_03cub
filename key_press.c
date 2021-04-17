@@ -33,8 +33,6 @@ void	ft_rotate(t_all *all, double c)
 void ft_lr_move(t_all *all, double c)
 {
   printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
-//   all->game.gpos_x -= c * (all->ray.dir_y * SPEED);
-//   all->game.gpos_y -= c * (all->ray.dir_y  * SPEED);
   if (all->game.map[(int)(all->game.gpos_y + all->ray.dir_y * (SPEED * c))]
 		[(int)(all->game.gpos_x - all->game.gpos_x * (SPEED * c))] != '1')
 		{
