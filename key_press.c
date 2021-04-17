@@ -33,12 +33,14 @@ void	ft_rotate(t_all *all, double c)
 void ft_lr_move(t_all *all, double c)
 {
   printf("x - %f, y - %f %f %f \n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y);
-  all->game.gpos_x -= c * (all->ray.dir_y);
-	if (all->game.map[(int)floor(all->game.gpos_y)][(int)floor(all->game.gpos_x)] == '1')
-		all->game.gpos_x += c * (all->ray.dir_y * SPEED / 100);
-	all->game.gpos_y += c * (all->ray.dir_x * SPEED / 100);
-	if (all->game.map[(int)floor(all->game.gpos_y)][(int)floor(all->game.gpos_x)] == '1')
-		all->game.gpos_y -= c * (all->ray.dir_x * SPEED / 100);
+//   all->game.gpos_x -= c * (all->ray.dir_y * SPEED);
+//   all->game.gpos_y -= c * (all->ray.dir_y  * SPEED);
+  if (all->game.map[(int)(all->game.gpos_y + all->ray.dir_y * (SPEED * c))]
+		[(int)(all->game.gpos_x - all->game.gpos_x * (SPEED * c))] != '1')
+		{
+			all->game.gpos_y -= -all->ray.dir_x * (0.2 * c);
+			all->game.gpos_x -= all->ray.dir_y * (0.2 * c);
+		}
     screen_ray(all);
 }
 
@@ -75,7 +77,7 @@ int key_press(int key, t_all *all)
   if (key == LEFT)
 		ft_rotate(all, 1);
   if (key == D)
-		ft_lr_move(all, 1);
+		ft_lr_move(all, -1);
   if (key == A)
 		ft_lr_move(all, 1);
     return(1);
