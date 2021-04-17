@@ -9,7 +9,8 @@ SRC = 	cube3d.c \
 		print_error.c \
 		get_file_args.c \
 		utils_ray.c \
-		key_press.c
+		key_press.c \
+		bitmap.c
 
 
 

@@ -205,6 +205,7 @@ void calc_texture(t_all *all);
 int key_press(int key, t_all *all);
 int get_texture(int *i, char *buf, t_all *all, int **addr);
 int		close_win(t_all *all);
+int	screenshot	(t_all *all);
 
 
 #endif

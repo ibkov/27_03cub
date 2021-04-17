@@ -126,10 +126,9 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     all->ray.plane_y = 0.66;
     all->ray.h = all->win.y;
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
-    ft_putstr_fd("\ngame start\n", 1);
+    if (cr_bmp == 1)
+      return (screenshot(all));
     screen_ray(all);
-    printf("%d", all->tex.no[0]);
-    cr_bmp = 0;
     namefile = 0;
     mlx_hook(all->win.win_ptr, 2, 0, key_press, all);
     mlx_hook(all->win.win_ptr, 17, 0, close_win, all);
