@@ -12,7 +12,7 @@
 
 #include "./includes/cube3d.h"
 
-void	ft_bdata(t_all *all, int fd)
+void	bdata(t_all *all, int fd)
 {
 	int				i;
 	int				j;
@@ -36,7 +36,7 @@ void	ft_bdata(t_all *all, int fd)
 	}
 }
 
-void	ft_binfo(t_all *s, int fd)
+void	binfo(t_all *s, int fd)
 {
 	int				n;
 	unsigned char	header[40];
@@ -60,7 +60,7 @@ void	ft_binfo(t_all *s, int fd)
 	write(fd, header, 40);
 }
 
-void	ft_bfile(t_all *s, int fd)
+void	bfile(t_all *s, int fd)
 {
 	int				n;
 	unsigned char	header[14];
@@ -85,9 +85,9 @@ int	screenshot(t_all *all)
 
 	screen_ray(all);
 	fd = open("bitmap.bmp", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
-	ft_bfile(all, fd);
-	ft_binfo(all, fd);
-	ft_bdata(all, fd);
+	bfile(all, fd);
+	binfo(all, fd);
+	bdata(all, fd);
 	close(fd);
 	free(all->img.img_ptr);
 	free(all->img.addr);

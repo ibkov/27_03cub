@@ -150,21 +150,9 @@ typedef struct	s_ray
     double 			texPos;
     int 			texY;
     int 			color;
+	double			arcos;
+
 }				t_ray;
-
-typedef struct	s_hit
-{
-	double			x;
-	double			y;
-	double			d;
-}				t_hit;
-
-// typedef struct	s_dir
-// {
-// 	double			x;
-// 	double			y;
-// 	double			a;
-// }				t_dir;
 
 
 typedef struct s_all
@@ -176,8 +164,6 @@ typedef struct s_all
 	t_mlx	mlx;
 	t_map   *map;
 	t_ray	ray;
-	t_hit	hit;
-	// t_dir	dir;
 	char 	*tmp;
 	t_stk	*stk;
 } 				t_all;

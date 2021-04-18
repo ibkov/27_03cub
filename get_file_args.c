@@ -36,7 +36,8 @@ int get_resolution(int *i, char *buf, t_all *all)
     all->win.x = all->win.max_width;
   if (all->win.y > all->win.max_height)
     all->win.y = all->win.max_height;
-  while (!ft_strchr(INVCHARS, buf[(*i)]))
+  (*i)--;
+  while (ft_strchr(INVCHARS, buf[(*i) + 1]))
     (*i)++;
   if (all->win.x < 1 || all->win.y < 1 || buf[*i] != '\0')
     return (ERROR_END_lINE);

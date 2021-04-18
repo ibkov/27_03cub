@@ -3,9 +3,9 @@ NO ./textures/WALL68.xpm
 SO ./textures/WALL68.xpm
 WE ./textures/WALL68.xpm
 EA ./textures/WALL68.xpm
-S ./textures/WALL68.xpm
+S ./textures/barrel.xpm
 
-F 125, 200, 124 sdfsd
+F 125, 200, 124
 C 173, 216, 230
 
 111111111111111

@@ -93,7 +93,8 @@ int screen_ray(t_all *all)
         // draw_walls(all);
         calc_texture(all);
         all->ray.sx++;
-    }
+        }
+    
     mlx_put_image_to_window(all->mlx.mlx_ptr, all->win.win_ptr, all->img.img_ptr, 0, 0);
     return (1);
 }
