@@ -90,11 +90,14 @@ char		**map_to_matrix(t_all *lst)
 		while (temp->line[j] != '\0')
 		{
 			matrix[i][j] = temp->line[j];
-      if (matrix[i][j] == 'N')
+      if ((matrix[i][j] == 'N' || matrix[i][j] == 'W' || matrix[i][j] == 'E' || matrix[i][j] == 'S') && !lst->game.gdirection)
       {
         lst->game.gpos_x = i; 
         lst->game.gpos_y = j;
+        lst->game.gdirection = matrix[i][j];
       }
+      if (matrix[i][j] == '2')
+        lst->game.count_sprites++;
 			j++;
 		}
 		matrix[i][j] = '\0';
@@ -104,11 +107,38 @@ char		**map_to_matrix(t_all *lst)
 	return (matrix);
 }
 
+// int check_map(t_all *all)
+// {
+//   int i;
+//   int j;
+ 
+//   i = 0;
+//   while (all->game.map[i])
+//   {
+//     j = 0;
+//     while (all->game.map[i][j] != '\0')
+//     {
+//       if ((all->game.map[i][j] == 'N' || all->game.map[i][j] == 'W' || all->game.map[i][j] == 'E' || all->game.map[i][j] == 'S') && !all->game.gdirection)
+//       {
+//         all->game.gpos_x = i; 
+//         all->game.gpos_y = j;
+//         all->game.gdirection = all->game.map[i][j];
+//       }
+//       j++;
+//     }
+//     if (all->game.map[i + 1])
+//       i++;
+//   }
+//   return (SUCCESS);
+// }
+
+
 int get_map(int *i, char *buf, t_all *all)
 {
   *i = *i;
   ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
   all->game.map = map_to_matrix(all);
+  // check_map(all);
   return (SUCCESS);
 }
 
@@ -128,6 +158,7 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
     if (cr_bmp == 1)
       return (screenshot(all));
+    printf("\n\n%d\n\n", all->game.count_sprites);
     screen_ray(all);
     namefile = 0;
     mlx_hook(all->win.win_ptr, 2, 0, key_press, all);

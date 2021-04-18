@@ -102,6 +102,8 @@ typedef struct s_game
 	int 	map_y;
 	double 	gpos_x;
 	double	gpos_y;
+	int 	count_sprites;
+	unsigned int gdirection;
 }				t_game;
 
 typedef struct				s_map
