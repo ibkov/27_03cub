@@ -1,11 +1,12 @@
-R 800 750
-NO ./NO.xpm
-SO ./SO.xpm
-WE ./WE.xpm
-EA ./EA.xpm
-S ./items/treasure.xpm
-F 182,182,182
-C 182,182,182
+R 800 600   
+NO ./textures/WALL68.xpm
+SO ./textures/WALL68.xpm
+WE ./textures/WALL68.xpm
+EA ./textures/WALL68.xpm
+S ./textures/barrel.xpm
+
+F 125, 200, 124
+C 173, 216, 230
 
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1

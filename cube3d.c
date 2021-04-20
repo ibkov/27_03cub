@@ -71,11 +71,9 @@ char *cor_start_ch(char *buffer)
   return (new_str);
 }
 
-char		**map_to_matrix(t_all *lst)
+char		**map_to_matrix(t_all *lst, int i, int j)
 {
 	t_map	*temp;
-	int		i;
-	int		j;
 	char	**matrix;
 
 	temp = lst->map;
@@ -90,55 +88,85 @@ char		**map_to_matrix(t_all *lst)
 		while (temp->line[j] != '\0')
 		{
 			matrix[i][j] = temp->line[j];
-      if ((matrix[i][j] == 'N' || matrix[i][j] == 'W' || matrix[i][j] == 'E' || matrix[i][j] == 'S') && !lst->game.gdirection)
-      {
-        lst->game.gpos_x = i; 
-        lst->game.gpos_y = j;
-        lst->game.gdirection = matrix[i][j];
-      }
-      if (matrix[i][j] == '2')
-        lst->game.count_sprites++;
 			j++;
 		}
 		matrix[i][j] = '\0';
 		temp = temp->next;
 		i++;
 	}
+  matrix[i] = NULL;
+  while (lst->map)
+  {
+    free(lst->map->line);
+    lst->map = lst->map->next;
+  }
+  free(temp);
 	return (matrix);
 }
 
-// int check_map(t_all *all)
-// {
-//   int i;
-//   int j;
- 
-//   i = 0;
-//   while (all->game.map[i])
-//   {
-//     j = 0;
-//     while (all->game.map[i][j] != '\0')
-//     {
-//       if ((all->game.map[i][j] == 'N' || all->game.map[i][j] == 'W' || all->game.map[i][j] == 'E' || all->game.map[i][j] == 'S') && !all->game.gdirection)
-//       {
-//         all->game.gpos_x = i; 
-//         all->game.gpos_y = j;
-//         all->game.gdirection = all->game.map[i][j];
-//       }
-//       j++;
-//     }
-//     if (all->game.map[i + 1])
-//       i++;
-//   }
-//   return (SUCCESS);
-// }
+void correct_position(t_all *all, int i, int j, char *ch)
+{
+  *ch = all->game.map[i][j];
+  all->game.gpos_x = (double)i + 0.5; 
+  all->game.gpos_y = (double)j + 0.5;
+  all->ray.dir_y = (*ch == 'E' || *ch == 'W') ? 1 : 0;
+  all->ray.dir_y *= (*ch == 'W') ? -1 : 1;
+  all->ray.dir_x = (*ch == 'S' || *ch == 'N') ? 1 : 0;
+  all->ray.dir_x *= (*ch == 'N') ? -1 : 1;
+  all->ray.plane_y = (*ch == 'S' || *ch == 'N') ? 0.66 : 0;
+  all->ray.plane_y *= (*ch == 'S') ? -1 : 1;
+  all->ray.plane_x = (*ch == 'W' || *ch == 'E') ? 0.66 : 0;
+  all->ray.plane_x *= (*ch == 'W') ? -1 : 1;
+}
+
+void add_sprites(t_all *all, int i, int j, int count)
+{
+  while (all->game.map[i])
+  {
+    j = 0;
+    while (all->game.map[i][j] != '\0')
+    { 
+      if (all->game.map[i][j] == '2')
+      {
+        all->sprite[count].x = (double)i + 0.5;
+        all->sprite[count].y = (double)j + 0.5;
+        count++;
+      }
+      j++;
+    }
+    i++;
+  }
+}
+
+int check_map(t_all *all, int i, int j, char ch)
+{
+  while (all->game.map[i])
+  {
+    j = 0;
+    while (all->game.map[i][j] != '\0')
+    { 
+      if (!ft_strchr("NSWE012", all->game.map[i][j]))
+        return (ERROR_MAP_CHAR);
+      if (ft_strchr("NSWE", all->game.map[i][j]) && !ch)
+        correct_position(all, i, j, &ch);
+      else if (ft_strchr("NSWE", all->game.map[i][j]) && ch)
+        return(ERROR_PLAYER_POSITION);
+      if (all->game.map[i][j] == '2')
+        all->game.count_sprites++;
+      j++;
+    }
+    i++;
+  }
+  if (!ch)
+    return(ERROR_NO_PLAYER_POSITION);
+  return (SUCCESS);
+}
 
 
 int get_map(int *i, char *buf, t_all *all)
 {
   *i = *i;
   ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
-  all->game.map = map_to_matrix(all);
-  // check_map(all);
   return (SUCCESS);
 }
 
@@ -149,21 +177,20 @@ int run_game(int cr_bmp, char *namefile, t_all *all)
     error = 0;
     if ((error = file_parse(0, namefile, all, 0)) != SUCCESS)
       return error_str(error);
+    all->game.map = map_to_matrix(all, 0, 0);
+    if ((error = check_map(all, 0, 0, 0)) != SUCCESS)
+      return error_str(error);
+    all->sprite = malloc(sizeof(t_sprite) * all->game.count_sprites);
+    add_sprites(all, 0, 0, 0);
+    all->ray.zbuffer = malloc(sizeof(double) * all->win.x);
     all->mlx.mlx_ptr = mlx_init();
-    all->ray.dir_x = -1;
-    all->ray.dir_y = 0;
-    all->ray.plane_x = 0;
-    all->ray.plane_y = 0.66;
     all->ray.h = all->win.y;
     all->win.win_ptr = mlx_new_window(all->mlx.mlx_ptr, all->win.x, all->win.y, "Game cube 3D");
     if (cr_bmp == 1)
       return (screenshot(all));
-    printf("\n\n%d\n\n", all->game.count_sprites);
     screen_ray(all);
-    namefile = 0;
     mlx_hook(all->win.win_ptr, 2, 0, key_press, all);
     mlx_hook(all->win.win_ptr, 17, 0, close_win, all);
-    // mlx_loop_hook(all->win.win_ptr, screen_ray, all);
     mlx_loop(all->mlx.mlx_ptr);
     
     return(SUCCESS);
@@ -178,8 +205,8 @@ void init_struct(int cr_bmp, char *namefile)
   ft_bzero(&all.img, sizeof(t_img));
   ft_bzero(&all.tex, sizeof(t_tex));
   ft_bzero(&all.game, sizeof(t_game));
-  all.tex.floor = 0xFF000000;
-  all.tex.ceil = 0xFF000000;
+  all.tex.floor = NONE;
+  all.tex.ceil = NONE;
   run_game(cr_bmp, namefile, &all);
 }
 

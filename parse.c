@@ -82,7 +82,7 @@ int fetch_line_file(int i, char *buf, t_all *all)
     error = get_color(&i ,buf, &all->tex.floor);
   if (buf[i] == 'C' && buf[i + 1] == ' ')
     error = get_color(&i ,buf, &all->tex.ceil);
-  if (all->win.x && all->win.y && all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
+  if (error == SUCCESS && all->win.x && all->win.y && all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
     error = 1;
   return ((error == 1 ? SUCCESS : error));
 }

@@ -57,8 +57,6 @@ void draw_fc_wall(t_all *all)
             all->ray.color = all->tex.ea[64 * all->ray.texY + all->ray.texX];
         if(all->ray.side == 0 && all->ray.ray_dir_x < 0) 
             all->ray.color = all->tex.no[64 * all->ray.texY + all->ray.texX];
-            // all->ray.color = (all->ray.color >> 1) & 8355711;
-
         all->img.addr[y++ * all->win.x + all->ray.sx] = all->ray.color;
       }
 }
@@ -76,4 +74,5 @@ void calc_texture(t_all *all)
       all->ray.step = 1.0 * 64 / all->ray.lineHeight;
       all->ray.texPos = (all->ray.drawStart - all->win.y / 2 + all->ray.lineHeight / 2) * all->ray.step;
       draw_fc_wall(all);
+      
 }

@@ -33,6 +33,7 @@
 # define RIGHT 124
 # define SPEED 0.4
 # define ROTATE_S 0.04
+# define NONE 0xFF000000
 
 typedef enum s_errors
 {
@@ -47,7 +48,10 @@ typedef enum s_errors
 	ERROR_END_lINE,
 	ERROR_MALLOC,
 	ERROR_TEXTUTE_EX,
-	ERROR_TEXTUTE_FILE
+	ERROR_TEXTUTE_FILE,
+	ERROR_PLAYER_POSITION,
+	ERROR_NO_PLAYER_POSITION,
+	ERROR_MAP_CHAR,
 
 
 } 				t_errors;
@@ -153,9 +157,14 @@ typedef struct	s_ray
     int 			texY;
     int 			color;
 	double			arcos;
-
+	double 			*zbuffer;
 }				t_ray;
 
+typedef struct s_sprite
+{
+		double x;
+		double y;
+} 				t_sprite;
 
 typedef struct s_all
 {
@@ -168,6 +177,8 @@ typedef struct s_all
 	t_ray	ray;
 	char 	*tmp;
 	t_stk	*stk;
+	t_sprite *sprite;
+
 } 				t_all;
 
 
@@ -194,6 +205,8 @@ int key_press(int key, t_all *all);
 int get_texture(int *i, char *buf, t_all *all, int **addr);
 int		close_win(t_all *all);
 int	screenshot	(t_all *all);
+void			ft_sprite(t_all *all);
+void draw_sprite(t_all *all);
 
 
 #endif

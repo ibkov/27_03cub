@@ -10,7 +10,8 @@ SRC = 	cube3d.c \
 		get_file_args.c \
 		utils_ray.c \
 		key_press.c \
-		bitmap.c
+		bitmap.c \
+		render_sprite.c
 
 
 

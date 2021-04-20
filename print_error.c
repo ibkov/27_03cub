@@ -34,5 +34,11 @@ int error_str(int error)
     ft_putstr_fd("\033[31m\nERROR\nFile texture not found\n\033[0m", 2);
    else if (error == ERROR_TEXTUTE_EX)
     ft_putstr_fd("\033[31m\nERROR\nInvalid extention texture file\n\n\033[0m", 2);
+  else if (error == ERROR_PLAYER_POSITION)
+    ft_putstr_fd("\033[31m\nERROR\nNot one player position on map\n\n\033[0m", 2);
+  else if (error == ERROR_NO_PLAYER_POSITION)
+    ft_putstr_fd("\033[31m\nERROR\nNo player position on map\n\n\033[0m", 2);
+  else if (error == ERROR_MAP_CHAR)
+    ft_putstr_fd("\033[31m\nERROR\nNot valid char in map\n\n\033[0m", 2);
   return (ERROR);
 }

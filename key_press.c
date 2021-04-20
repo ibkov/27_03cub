@@ -21,6 +21,7 @@ void	move(t_all *all, double c)
 
 void	ft_rotate(t_all *all, double c)
 {
+	printf("x - %f, y - %f %f %f %f %f\n", all->game.gpos_x, all->game.gpos_y, all->ray.dir_x, all->ray.dir_y, all->ray.plane_x, all->ray.plane_y);
       double oldDirX = all->ray.dir_x;
       all->ray.dir_x = all->ray.dir_x * cos(c * ROTATE_S) - all->ray.dir_y * sin(c * ROTATE_S);
       all->ray.dir_y = oldDirX * sin(c * ROTATE_S) + all->ray.dir_y * cos(c * ROTATE_S);
@@ -45,19 +46,18 @@ void ft_lr_move(t_all *all, double c)
 int		close_win(t_all *all)
 {
 	int	i;
-  all->win.win_ptr = 0;
+  	all->win.win_ptr = 0;
 	i = 0;
-	// while (i < s->map.y)
-	// 	free(s->map.tab[i++]);
-	// free(s->map.tab);
-	// free(all->tex.no);
-	// free(s->tex.s);
-	// free(s->tex.e);
-	// free(s->tex.w);
-	// free(s->tex.i);
-	// if (win == 1)
-	// 	mlx_destroy_window(s->mlx.ptr, s->win.ptr);
-	// free(s->mlx.ptr);
+	while (all->game.map)
+		free(all->game.map[i++]);
+	free(all->game.map);
+	free(all->tex.no);
+	free(all->tex.we);
+	free(all->tex.ea);
+	free(all->tex.so);
+	free(all->tex.sp);
+	mlx_destroy_window(all->mlx.mlx_ptr, all->win.win_ptr);
+	free(all->mlx.mlx_ptr);
 	exit(0);
 	return (1);
 }
