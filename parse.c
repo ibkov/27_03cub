@@ -65,7 +65,7 @@ int	fetch_line_file(int i, char *buf, t_all *all, int error)
 	while (ft_strchr(INVCHARS, buf[i]))
 		i++;
 	if (buf[i] == '1' && buf[i] != '\0')
-		error = get_map(&i, buf, all);
+		error = get_map(buf, all);
 	if (buf[i] == 'R' && buf[i + 1] == ' ')
 		error = get_resolution(&i, buf, all);
 	if (buf[i] == 'N' && buf[i + 1] == 'O' && buf[i + 2] == ' ')

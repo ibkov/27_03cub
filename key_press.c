@@ -56,7 +56,6 @@ int	close_win(t_all *all)
 {
 	int	i;
 
-	// all->win.win_ptr = 0;
 	i = 0;
 	while (all->game.map[i])
 		free(all->game.map[i++]);

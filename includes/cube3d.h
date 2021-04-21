@@ -201,7 +201,7 @@ int		get_resolution(int *i, char *buf, t_all *all);
 int		get_texture(int *i, char *buf, t_all *all, int **addr);
 int		check_full_tex(t_all *all, int **addr, char *filename_tex);
 int		get_color(int *i, char *buf, unsigned int *clr);
-int		get_map(int *i, char *buf, t_all *all);
+int		get_map(char *buf, t_all *all);
 int		ft_lst_sz(t_map *lst);
 void	ft_lstadd_b(t_map **lst, t_map *new);
 t_map	*ft_lstl(t_map *lst);
