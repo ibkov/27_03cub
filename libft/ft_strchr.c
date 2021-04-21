@@ -19,8 +19,8 @@ char	*ft_strchr(const char *string, int symbol)
 		string++;
 	}
 	if (symbol == '\0')
-		return ((char*)string);
+		return ((char *)string);
 	if (*string == '\0')
 		return (0);
-	return ((char*)string);
+	return ((char *)string);
 }

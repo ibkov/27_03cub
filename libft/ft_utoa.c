@@ -12,9 +12,9 @@
 
 #include "libft.h"
 
-int		count_in_num_utoa(long num)
+int	count_in_num_utoa(long num)
 {
-	int		i;
+	int	i;
 
 	i = 1;
 	while (num > 0)
@@ -35,7 +35,8 @@ char	*ft_utoa(unsigned int n)
 	len = count_in_num_utoa(num);
 	if (n == 0)
 		return (str = ft_strdup("0"));
-	if (!(str = malloc(sizeof(char) * len)))
+	str = malloc(sizeof(char) * len);
+	if (!str)
 		return (0);
 	len--;
 	str[len] = '\0';

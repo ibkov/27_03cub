@@ -18,7 +18,7 @@ char	*ft_strrchr(const char *s, int c)
 	int		position_last;
 	char	*new_str;
 
-	new_str = (char*)s;
+	new_str = (char *)s;
 	position_last = -1;
 	index = 0;
 	while (s[index])

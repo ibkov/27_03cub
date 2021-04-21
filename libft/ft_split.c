@@ -22,10 +22,10 @@ void	ft_free_mem(char **main_array, int main_index)
 	free(main_array);
 }
 
-int		ft_count_words(char const *s, char c)
+int	ft_count_words(char const *s, char c)
 {
-	int index;
-	int count_words;
+	int	index;
+	int	count_words;
 
 	index = 0;
 	count_words = 0;
@@ -42,13 +42,13 @@ int		ft_count_words(char const *s, char c)
 
 char	**mem_words(char **main_array, char const *s, char c, int index)
 {
-	int lc;
-	int i;
+	int	lc;
+	int	i;
 
-	lc = 0;
 	i = 0;
 	while (s[index] && index <= (int)ft_strlen(s))
 	{
+		lc = 0;
 		while (s[index] != c && s[index])
 		{
 			lc++;
@@ -56,14 +56,14 @@ char	**mem_words(char **main_array, char const *s, char c, int index)
 		}
 		if (lc != 0)
 		{
-			if (!(main_array[i] = (char*)malloc(sizeof(char) * (lc + 1))))
+			main_array[i] = (char *)malloc(sizeof(char) * (lc + 1));
+			if (!main_array[i])
 			{
 				ft_free_mem(main_array, i);
 				return (0);
 			}
 			i++;
 		}
-		lc = 0;
 		index++;
 	}
 	return (main_array);
@@ -108,7 +108,8 @@ char	**ft_split(char const *s, char c)
 	if (!s)
 		return (0);
 	len_main_array = ft_count_words(s, c);
-	if (!(main_array = (char**)malloc(sizeof(char*) * (len_main_array + 1))))
+	main_array = (char **)malloc(sizeof(char *) * (len_main_array + 1));
+	if (!main_array)
 		return (0);
 	main_array = mem_words(main_array, s, c, index);
 	main_array = collect_data(main_array, s, c);

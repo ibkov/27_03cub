@@ -12,19 +12,18 @@
 
 #include "libft.h"
 
-int	ft_intlen(int num)
+int	ft_intlen(int num, int count)
 {
-	int	count;
-
-	count = 0;
 	if (num == -2147483648)
 		return (11);
 	if (num > 0)
+	{
 		while (num > 0)
 		{
 			num /= 10;
 			count++;
 		}
+	}
 	else if (num == 0)
 		return (1);
 	else
@@ -56,7 +55,7 @@ char	*ft_itoa(int n)
 	char	*str_num;
 	int		i;
 
-	i = ft_intlen(n);
+	i = ft_intlen(n, 0);
 	str_num = (char *)malloc(sizeof(char) * i + 1);
 	if (!str_num)
 		return (0);

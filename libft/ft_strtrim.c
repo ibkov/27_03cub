@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int		ft_findchr(const char *s, int symbol)
+int	ft_findchr(const char *s, int symbol)
 {
 	if (symbol != '\0')
 		while (*s)
@@ -34,13 +34,13 @@ char	*ft_strtrim(char const *s1, char const *set)
 	begin_index = 0;
 	end_index = ft_strlen(s1) - 1;
 	if (!*set || !*s1)
-		return ((char*)s1);
+		return ((char *)s1);
 	while (ft_findchr(set, s1[begin_index]))
 		begin_index++;
 	while (ft_findchr(set, s1[end_index]) && end_index > 0)
 		end_index--;
-	if (!(new_str = (char*)malloc(sizeof(*new_str)\
-				* (end_index - begin_index) + 2)))
+	new_str = (char *)malloc(sizeof(*new_str) * (end_index - begin_index) + 2);
+	if (!new_str)
 		return (0);
 	while (end_index >= begin_index)
 		new_str[i++] = s1[begin_index++];

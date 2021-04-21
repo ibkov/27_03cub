@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_nbr_len.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: burswyck <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/12 20:08:32 by burswyck          #+#    #+#             */
+/*   Updated: 2020/11/12 20:08:36 by burswyck         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 
-int ft_nbr_len(int nbr, int base_len)
+int	ft_nbr_len(int nbr, int base_len)
 {
-    int i;
+	int	i;
 
-    i = 1;
-    while (nbr >= base_len)
-    {
-        nbr /= base_len;
-        i++; 
-    }
-    return (i);
+	i = 1;
+	while (nbr >= base_len)
+	{
+		nbr /= base_len;
+		i++;
+	}
+	return (i);
 }
