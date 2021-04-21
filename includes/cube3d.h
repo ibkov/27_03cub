@@ -221,5 +221,10 @@ void	draw_sprite(t_all *all, int i);
 int		get_color(int *i, char *buf, unsigned int *color);
 int		check_map(t_all *all, int i, int j, char ch);
 void	correct_position(t_all *all, int i, int j, char *ch);
+int		close_win(t_all *all);
+void	add_sprites(t_all *all, int i, int j, int count);
+void	full_new_line(char *buffer, char *new_str);
+char 	*cor_start_ch(char *buffer);
+void	correct_position(t_all *all, int i, int j, char *ch);
 
 #endif

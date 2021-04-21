@@ -119,4 +119,6 @@ void	draw_sprite(t_all *all, int i)
 		put_sprites(all, 0, 0);
 		i++;
 	}
+	free(spriteOrder);
+	free(spriteDistance);
 }

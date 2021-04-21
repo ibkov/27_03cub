@@ -1,4 +1,4 @@
-NAME = cube3D
+NAME = cub3D
 
 SRC = 	cube3d.c \
 		gnl/get_next_line.c \
@@ -11,9 +11,8 @@ SRC = 	cube3d.c \
 		utils_ray.c \
 		key_press.c \
 		bitmap.c \
-		render_sprite.c
-
-
+		render_sprite.c \
+		utils_cub.c
 
 OBJ = $(SRC:.c=.o)
 

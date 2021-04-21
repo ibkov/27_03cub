@@ -17,7 +17,7 @@ int	check_full_tex(t_all *all, int **addr, char *filename_tex)
 	void	*img;
 	int		array[5];
 
-	if (!(ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xmp", 4)))
+	if (ft_strncmp(filename_tex + ft_strlen(filename_tex) - 4, ".xpm", 4))
 		return (ERROR_TEXTUTE_EX);
 	all->tex.fd = open(filename_tex, O_RDONLY);
 	if (all->tex.fd == -1)
@@ -60,11 +60,8 @@ int	get_texture(int *i, char *buf, t_all *all, int **addr)
 	return (error);
 }
 
-int	fetch_line_file(int i, char *buf, t_all *all)
+int	fetch_line_file(int i, char *buf, t_all *all, int error)
 {
-	int	error;
-
-	error = 0;
 	while (ft_strchr(INVCHARS, buf[i]))
 		i++;
 	if (buf[i] == '1' && buf[i] != '\0')
@@ -91,21 +88,24 @@ int	fetch_line_file(int i, char *buf, t_all *all)
 	return (error);
 }
 
-int file_parse(int fd, char *namefile, t_all *all, int error)
+int	file_parse(int fd, char *namefile, t_all *all, int error)
 {
-  char *buffer;
-  
-  if ((fd = open(namefile, O_RDONLY)) == -1)
-    return (ERROR_READING_FILE);
-  while ((get_next_line(fd, &buffer)) > ERROR)
-  {
-    if ((error = fetch_line_file(0, buffer, all)) != SUCCESS)
-      return (error);
-    free(buffer);
-  }
-  if ((error = fetch_line_file(0, buffer, all)) != SUCCESS)
-      return (error);
-  free(buffer);
-  close(fd);
-  return (SUCCESS);
+	char	*buffer;
+
+	fd = open(namefile, O_RDONLY);
+	if (fd == -1)
+		return (ERROR_READING_FILE);
+	while ((get_next_line(fd, &buffer)) > ERROR)
+	{
+		error = fetch_line_file(0, buffer, all, 0);
+		if (error != SUCCESS)
+			return (error);
+		free(buffer);
+	}
+	error = fetch_line_file(0, buffer, all, 0);
+	if (error != SUCCESS)
+		return (error);
+	free(buffer);
+	close(fd);
+	return (SUCCESS);
 }

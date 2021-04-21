@@ -56,9 +56,9 @@ int	close_win(t_all *all)
 {
 	int	i;
 
-	all->win.win_ptr = 0;
+	// all->win.win_ptr = 0;
 	i = 0;
-	while (all->game.map)
+	while (all->game.map[i])
 		free(all->game.map[i++]);
 	free(all->game.map);
 	free(all->tex.no);
@@ -75,15 +75,17 @@ int	key_press(int key, t_all *all)
 {
 	if (key == W)
 		move(all, -1);
-	if (key == S)
+	else if (key == S)
 		move(all, 1);
-	if (key == RIGHT)
+	else if (key == RIGHT)
 		ft_rotate(all, -1);
-	if (key == LEFT)
+	else if (key == LEFT)
 		ft_rotate(all, 1);
-	if (key == D)
+	else if (key == D)
 		ft_lr_move(all, -1);
-	if (key == A)
+	else if (key == A)
 		ft_lr_move(all, 1);
+	else if (key == ESC)
+		close_win(all);
 	return (SUCCESS);
 }
