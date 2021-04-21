@@ -12,20 +12,16 @@
 
 #include "get_next_line.h"
 
-int		free_memory(char *buffer, int error)
+int	free_memory(char *buffer, int error)
 {
 	free(buffer);
 	return (error);
 }
 
-char	*ft_check_last(char *last)
+char	*ft_check_last(char *last, int i, int j)
 {
-	int		i;
-	int		j;
 	char	*clear;
 
-	i = 0;
-	j = 0;
 	if (!last)
 		return (0);
 	while (last[i] && last[i] != '\n')
@@ -35,7 +31,8 @@ char	*ft_check_last(char *last)
 		free_memory(last, 0);
 		return (0);
 	}
-	if (!(clear = malloc(sizeof(char) * ((ft_strlen_gnl(last) - i) + 1))))
+	clear = malloc(sizeof(char) * ((ft_strlen_gnl(last) - i) + 1));
+	if (!clear)
 		return (0);
 	i++;
 	while (last[i])
@@ -55,7 +52,8 @@ char	*to_line(char *last)
 		return (0);
 	while (last[count_ch] && last[count_ch] != '\n')
 		count_ch++;
-	if (!(temp = (char*)malloc(sizeof(char) * (count_ch + 1))))
+	temp = (char *)malloc(sizeof(char) * (count_ch + 1));
+	if (!temp)
 		return (0);
 	count_ch = 0;
 	while (last[count_ch] && last[count_ch] != '\n')
@@ -67,7 +65,7 @@ char	*to_line(char *last)
 	return (temp);
 }
 
-int		get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	char			*buffer;
 	static char		*last;
@@ -87,6 +85,6 @@ int		get_next_line(int fd, char **line)
 	}
 	free(buffer);
 	*line = to_line(last);
-	last = ft_check_last(last);
+	last = ft_check_last(last, 0, 0);
 	return (!fl_read) ? 0 : 1;
 }

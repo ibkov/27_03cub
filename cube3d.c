@@ -12,26 +12,6 @@
 
 #include "./includes/cube3d.h"
 
-int get_color(int *i, char *buf, unsigned int *color)
-{
-  t_color rgb;
-  ft_bzero(&rgb, sizeof(t_color));
-  if (*color != 0xFF000000)
-    return (ERROR);
-  (*i)++;
-  rgb.r = ft_atoi_cub(i, buf, 0);
-  (*i)++;
-  rgb.g = ft_atoi_cub(i, buf, 0);
-  (*i)++;
-  rgb.b = ft_atoi_cub(i, buf, 0);
-  while (!ft_strchr(INVCHARS, buf[(*i)]))
-    (*i)++;
-  if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.r > 255)
-    return (ERROR);
-  *color = rgb.r * 256 * 256 + rgb.g * 256 + rgb.b;
-  return (SUCCESS);
-}
-
 void full_new_line(char *buffer, char *new_str)
 {
   int i;
@@ -137,31 +117,6 @@ void add_sprites(t_all *all, int i, int j, int count)
     i++;
   }
 }
-
-int check_map(t_all *all, int i, int j, char ch)
-{
-  while (all->game.map[i])
-  {
-    j = 0;
-    while (all->game.map[i][j] != '\0')
-    { 
-      if (!ft_strchr("NSWE012", all->game.map[i][j]))
-        return (ERROR_MAP_CHAR);
-      if (ft_strchr("NSWE", all->game.map[i][j]) && !ch)
-        correct_position(all, i, j, &ch);
-      else if (ft_strchr("NSWE", all->game.map[i][j]) && ch)
-        return(ERROR_PLAYER_POSITION);
-      if (all->game.map[i][j] == '2')
-        all->game.count_sprites++;
-      j++;
-    }
-    i++;
-  }
-  if (!ch)
-    return(ERROR_NO_PLAYER_POSITION);
-  return (SUCCESS);
-}
-
 
 int get_map(int *i, char *buf, t_all *all)
 {

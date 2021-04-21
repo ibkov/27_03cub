@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_sprite.c                                      :+:      :+:    :+:   */
+/*   render_sprite.c                                      :+:      :+:    :+: */
 /*                                                    +:+ +:+         +:+     */
 /*   By: burswyck <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,12 +12,12 @@
 
 #include "./includes/cube3d.h"
 
-void sortSprites(int* order, double* dist, t_all *all)
+void	sort_sprites(int *order, double *dist, t_all *all)
 {
-	int				i;
-	int				j;
-	double			tmp;
-	int				temp_i;
+	int		i;
+	int		j;
+	double	tmp;
+	int		temp_i;
 
 	j = 0;
 	while (j < all->game.count_sprites - 1)
@@ -40,55 +40,83 @@ void sortSprites(int* order, double* dist, t_all *all)
 	}
 }
 
-void draw_sprite(t_all *all)
+void	calc_sprite_ray(t_all *all, int *spriteOrder, int i)
 {
-	int spriteOrder[all->game.count_sprites];
-	double spriteDistance[all->game.count_sprites];
-	for(int i = 0; i < all->game.count_sprites; i++)
-    {
-      spriteOrder[i] = i;
-      spriteDistance[i] = ((all->game.gpos_x - all->sprite[i].x) * (all->game.gpos_x - all->sprite[i].x) + (all->game.gpos_y - all->sprite[i].y) * (all->game.gpos_y - all->sprite[i].y)); //sqrt not taken, unneeded
-    }
-    sortSprites(spriteOrder, spriteDistance, all);
-    for(int i = 0; i < all->game.count_sprites; i++)
-    {
-      double spriteX = all->sprite[spriteOrder[i]].x - all->game.gpos_x;
-      double spriteY = all->sprite[spriteOrder[i]].y - all->game.gpos_y;
-      double invDet = 1.0 / (all->ray.plane_x * all->ray.dir_y - all->ray.dir_x * all->ray.plane_y); //required for correct matrix multiplication
+	all->sray.sX = all->sprite[spriteOrder[i]].x - all->game.gpos_x;
+	all->sray.sY = all->sprite[spriteOrder[i]].y - all->game.gpos_y;
+	all->sray.invDet = 1.0 / (all->ray.plane_x * all->ray.dir_y - \
+	all->ray.dir_x * all->ray.plane_y);
+	all->sray.trX = all->sray.invDet * (all->ray.dir_y * all->sray.sX - \
+	all->ray.dir_x * all->sray.sY);
+	all->sray.trY = all->sray.invDet * (-all->ray.plane_y * all->sray.sX + \
+	all->ray.plane_x * all->sray.sY);
+	all->sray.sSX = (int)((all->win.x / 2) * \
+	(1 + all->sray.trX / all->sray.trY));
+	all->sray.vMS = (int)(VMOVE / all->sray.trY);
+	all->sray.sH = abs((int)(all->win.y / (all->sray.trY))) / VDIV;
+	all->sray.dSY = -all->sray.sH / 2 + all->win.y / 2 + all->sray.vMS;
+	if (all->sray.dSY < 0)
+		all->sray.dSY = 0;
+	all->sray.drawEndY = all->sray.sH / 2 + all->win.y / 2 + all->sray.vMS;
+	if (all->sray.drawEndY >= all->win.y)
+		all->sray.drawEndY = all->win.y - 1;
+	all->sray.sW = abs((int)(all->win.y / (all->sray.trY))) / UDIV;
+	all->sray.dSX = -all->sray.sW / 2 + all->sray.sSX;
+	if (all->sray.dSX < 0)
+		all->sray.dSX = 0;
+	all->sray.dEX = all->sray.sW / 2 + all->sray.sSX;
+	if (all->sray.dEX >= all->win.x)
+		all->sray.dEX = all->win.x - 1;
+}
 
-      double transformX = invDet * (all->ray.dir_y * spriteX - all->ray.dir_x * spriteY);
-      double transformY = invDet * (-all->ray.plane_y * spriteX + all->ray.plane_x * spriteY); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(spriteDistance[i])
-
-      int spriteScreenX = (int)((all->win.x / 2) * (1 + transformX / transformY));
-      #define uDiv 1
-      #define vDiv 1
-      #define vMove 0.0
-      int vMoveScreen = (int)(vMove / transformY);
-      int spriteHeight = abs((int)(all->win.y / (transformY))) / vDiv;
-      int drawStartY = -spriteHeight / 2 + all->win.y / 2 + vMoveScreen;
-      if(drawStartY < 0) drawStartY = 0;
-      int drawEndY = spriteHeight / 2 + all->win.y / 2 + vMoveScreen;
-      if(drawEndY >= all->win.y ) drawEndY = all->win.y  - 1;
-
-      //calculate width of the sprite
-      int spriteWidth = abs((int)(all->win.y / (transformY))) / uDiv;
-      int drawStartX = -spriteWidth / 2 + spriteScreenX;
-      if(drawStartX < 0) drawStartX = 0;
-      int drawEndX = spriteWidth / 2 + spriteScreenX;
-      if(drawEndX >= all->win.x) drawEndX = all->win.x - 1;
-
-      //loop through every vertical stripe of the sprite on screen
-      for(int stripe = drawStartX; stripe < drawEndX; stripe++)
-      {
-        int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * 64 / spriteWidth) / 256;
-        if(transformY > 0 && stripe > 0 && stripe < all->win.x && transformY < all->ray.zbuffer[stripe])
-        for(int y = drawStartY; y < drawEndY; y++) //for every pixel of the current stripe
+void	put_sprites(t_all *all, int y, int stripe)
+{
+	stripe = all->sray.dSX;
+	while (stripe < all->sray.dEX)
+	{
+		all->sray.texX = (int)(256 * (stripe - (-all->sray.sW / 2 + all->sray.sSX)) * \
+		64 / all->sray.sW) / 256;
+		if (all->sray.trY > 0 && stripe > 0 && stripe < all->win.x && \
+		all->sray.trY < all->ray.zbuffer[stripe])
+		{
+			y = all->sray.dSY;
+			while (y < all->sray.drawEndY)
 			{
-			int d = (y-vMoveScreen) * 256 - all->win.y * 128 + spriteHeight * 128; //256 and 128 factors to avoid floats
-			int texY = ((d * 64) / spriteHeight) / 256;
-			int color = all->tex.sp[64 * texY + texX]; //get current color from the texture
-			if((color & 0x00FFFFFF) != 0) all->img.addr[y * all->win.x + stripe] =  color; //paint pixel if it isn't black, black is the invisible color
+				all->sray.d = (y - all->sray.vMS) * 256 - all->win.y * \
+				128 + all->sray.sH * 128;
+				all->sray.texY = ((all->sray.d * 64) / all->sray.sH) / 256;
+				all->sray.color = all->tex.sp[64 * all->sray.texY + \
+				all->sray.texX];
+				if ((all->sray.color & 0x00FFFFFF) != 0)
+					all->img.addr[y * all->win.x + stripe] = all->sray.color;
+				y++;
 			}
-    	}	
+		}
+		stripe++;
+	}
+}
+
+void	draw_sprite(t_all *all, int i)
+{
+	int		*spriteOrder;
+	double	*spriteDistance;
+
+	spriteOrder = malloc(sizeof(int) * all->game.count_sprites + 1);
+	spriteDistance = malloc(sizeof(double) * all->game.count_sprites + 1);
+	while (i < all->game.count_sprites)
+	{
+		spriteOrder[i] = i;
+		spriteDistance[i] = ((all->game.gpos_x - all->sprite[i].x) * \
+		(all->game.gpos_x - all->sprite[i].x) + (all->game.gpos_y - all->sprite[i].y) * \
+		(all->game.gpos_y - all->sprite[i].y));
+		i++;
+	}
+	sort_sprites(spriteOrder, spriteDistance, all);
+	i = 0;
+	while (i < all->game.count_sprites)
+	{
+		calc_sprite_ray(all, spriteOrder, i);
+		put_sprites(all, 0, 0);
+		i++;
 	}
 }

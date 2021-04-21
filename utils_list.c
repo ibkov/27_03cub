@@ -16,7 +16,8 @@ t_map	*ft_lstn(char *content)
 {
 	t_map	*new_elem;
 
-	if (!(new_elem = malloc(sizeof(t_map))))
+	new_elem = malloc(sizeof(t_map));
+	if (!new_elem)
 		return (0);
 	new_elem->line = content;
 	new_elem->next = 0;
@@ -53,7 +54,7 @@ void	ft_lstadd_b(t_map **lst, t_map *new)
 	new->next = 0;
 }
 
-int		ft_lst_sz(t_map *lst)
+int	ft_lst_sz(t_map *lst)
 {
 	int		count;
 	t_map	*temp;
