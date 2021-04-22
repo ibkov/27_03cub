@@ -14,8 +14,7 @@
 
 int	ft_atoi_cub(int *i, char *buf, int num)
 {
-	while (ft_strchr(INVCHARS, buf[(*i)]))
-		(*i)++;
+	skip_spaces(buf, i);
 	while (buf[*i] >= '0' && buf[*i] <= '9')
 	{
 		num = num * 10 + (buf[*i] - 48);
@@ -36,9 +35,8 @@ int	get_resolution(int *i, char *buf, t_all *all)
 		all->win.x = all->win.max_width;
 	if (all->win.y > all->win.max_height)
 		all->win.y = all->win.max_height;
-	while (ft_strchr(INVCHARS, buf[(*i)]))
-		(*i)++;
-	if (all->win.x < 1 || all->win.y < 1 || buf[*i - 1] != '\0')
+	skip_spaces(buf, i);
+	if (all->win.x < 1 || all->win.y < 1 || buf[*i] != '\0')
 		return (ERROR_END_lINE);
 	return (SUCCESS);
 }

@@ -21,7 +21,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 
-# define INVCHARS "\t\v\r\f\n "
+# define INVCHARS "\t\v\r\f "
 # define ESC 53
 # define W 13
 # define A 0
@@ -199,7 +199,7 @@ int		get_resolution(int *i, char *buf, t_all *all);
 int		get_texture(int *i, char *buf, t_all *all, int **addr);
 int		check_full_tex(t_all *all, int **addr, char *filename_tex);
 int		get_color(int *i, char *buf, unsigned int *clr);
-int		get_map(char *buf, t_all *all);
+int		get_map(int *i, char *buf, t_all *all);
 int		ft_lst_sz(t_map *lst);
 void	ft_lstadd_b(t_map **lst, t_map *new);
 t_map	*ft_lstl(t_map *lst);
@@ -224,5 +224,6 @@ void	add_sprites(t_all *all, int i, int j, int count);
 void	full_new_line(char *buffer, char *new_str);
 char	*cor_start_ch(char *buffer);
 void	correct_position(t_all *all, int i, int j, char *ch);
+int		skip_spaces(char *line, int *i);
 
 #endif

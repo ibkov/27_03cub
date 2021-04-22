@@ -4,7 +4,7 @@ INCLUDES = -I includes/ -I libft/ -I gnl/
 
 FLAGS = -Wall -Wextra -Werror
 
-CC = gcc
+CC = gcc -g
 
 DIR_L = src/
 
@@ -20,7 +20,7 @@ LIST = 	cube3d.c \
 		key_press.c \
 		bitmap.c \
 		render_sprite.c \
-		utils_cub.c
+		utils_cub.c \
 
 SRC = $(addprefix $(DIR_L), $(LIST))
 
@@ -38,7 +38,7 @@ $(NAME): $(OBJ)
 clean:
 		make -C minilibx clean
 		make -C libft clean
-		rm -rf $(OBJ) gnl/$(OBJ) libft.a libmlx.a
+		rm -rf $(OBJ) libft.a libmlx.a
 
 fclean: clean
 		make -C minilibx clean

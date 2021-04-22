@@ -41,8 +41,9 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 	return (matrix);
 }
 
-int	get_map(char *buf, t_all *all)
-{
+int	get_map(int *i, char *buf, t_all *all)
+{ 
+	*i += ft_strlen(buf);
 	ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
 	return (SUCCESS);
 }
@@ -97,5 +98,5 @@ int	main(int argc, char **argv)
 	ft_strlen(argv[1]) - 4, ".cub", 4))
 		init_struct(0, argv[1]);
 	else
-		ft_putstr_fd("\033[31m\nERROR\nMAIN ARGUMENTS\n\n\033[0m", 2);
+		ft_putstr_fd("\033[31m\nError\nMAIN ARGUMENTS\n\n\033[0m", 2);
 }

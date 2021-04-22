@@ -12,6 +12,14 @@
 
 #include "cub3d.h"
 
+int	skip_spaces(char *line, int *i)
+{
+	while ((line[*i] == ' ' || line[*i] == '\t' || line[*i] == '\n') \
+	|| (line[*i] == '\r' || line[*i] == '\v' || line[*i] == '\f'))
+		(*i)++;
+	return (1);
+}
+
 int	check_full_tex(t_all *all, int **addr, char *filename_tex)
 {
 	void	*img;
@@ -62,10 +70,11 @@ int	get_texture(int *i, char *buf, t_all *all, int **addr)
 
 int	fetch_line_file(int i, char *buf, t_all *all, int error)
 {
-	while (ft_strchr(INVCHARS, buf[i]))
-		i++;
+	skip_spaces(buf, &i);
+	if (buf[i] == '\0')
+		return (SUCCESS);
 	if (buf[i] == '1' && buf[i] != '\0')
-		error = get_map(buf, all);
+		error = get_map(&i, buf, all);
 	if (buf[i] == 'R' && buf[i + 1] == ' ')
 		error = get_resolution(&i, buf, all);
 	if (buf[i] == 'N' && buf[i + 1] == 'O' && buf[i + 2] == ' ')
@@ -82,7 +91,10 @@ int	fetch_line_file(int i, char *buf, t_all *all, int error)
 		error = get_color(&i, buf, &all->tex.floor);
 	if (buf[i] == 'C' && buf[i + 1] == ' ')
 		error = get_color(&i, buf, &all->tex.ceil);
-	if (error == SUCCESS && all->win.x && all->win.y && \
+	skip_spaces(buf, &i);
+	if (buf[i] != '\0')
+		return (ERROR);
+	if (error == 1 && all->win.x && all->win.y && all->tex.sp && \
 	all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
 		return (SUCCESS);
 	return (error);
@@ -95,7 +107,7 @@ int	file_parse(int fd, char *namefile, t_all *all, int error)
 	fd = open(namefile, O_RDONLY);
 	if (fd == -1)
 		return (ERROR_READING_FILE);
-	while ((get_next_line(fd, &buffer)) > ERROR)
+	while ((get_next_line(fd, &buffer)) == 1)
 	{
 		error = fetch_line_file(0, buffer, all, 0);
 		if (error != SUCCESS)
