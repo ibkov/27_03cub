@@ -4,7 +4,7 @@
         "name": "(lldb) Запустить",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder}/cube3D",
+        "program": "${workspaceFolder}/cub3D",
         "args": ["maps/map.cub"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",

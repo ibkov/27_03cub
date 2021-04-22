@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 void	add_sprites(t_all *all, int i, int j, int count)
 {

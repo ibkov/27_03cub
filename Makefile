@@ -1,8 +1,16 @@
 NAME = cub3D
 
-SRC = 	cube3d.c \
-		gnl/get_next_line.c \
-		gnl/get_next_line_utils.c \
+INCLUDES = -I includes/ -I libft/ -I gnl/
+
+FLAGS = -Wall -Wextra -Werror
+
+CC = gcc
+
+DIR_L = src/
+
+LIST = 	cube3d.c \
+		get_next_line.c \
+		get_next_line_utils.c \
 		ray_casting.c \
 		parse.c \
 		utils_list.c \
@@ -14,17 +22,18 @@ SRC = 	cube3d.c \
 		render_sprite.c \
 		utils_cub.c
 
+SRC = $(addprefix $(DIR_L), $(LIST))
+
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ)	
 		make -C minilibx
 		mv minilibx/libmlx.a .
 		make -C libft
 		mv libft/libft.a .
-		gcc -Wall -g -Werror -Wextra -c $(SRC)
-		gcc -Wall -g -Werror -Wextra -L. -lmlx -lft -framework OpenGL -framework Appkit $(OBJ) -o $(NAME)
+		$(CC) -o $(NAME) -L. -lmlx -lft -framework OpenGL -framework Appkit $(OBJ)
 
 clean:
 		make -C minilibx clean

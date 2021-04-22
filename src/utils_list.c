@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 t_map	*ft_lstn(char *content)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 void	bdata(t_all *all, int fd)
 {

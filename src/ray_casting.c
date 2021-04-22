@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 void	calul_ray(t_all *all)
 {

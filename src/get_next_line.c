@@ -74,11 +74,13 @@ int	get_next_line(int fd, char **line)
 	fl_read = 1;
 	if (fd < 0 || !line || BUFFER_SIZE < 1)
 		return (-1);
-	if (!(buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
 		return (-1);
 	while (fl_read != 0 && !ft_strchr(last, '\n'))
 	{
-		if ((fl_read = read(fd, buffer, BUFFER_SIZE)) == -1)
+		fl_read = read(fd, buffer, BUFFER_SIZE);
+		if (fl_read == -1)
 			return (free_memory(buffer, -1));
 		buffer[fl_read] = '\0';
 		last = ft_strjoin(last, buffer);
@@ -86,5 +88,7 @@ int	get_next_line(int fd, char **line)
 	free(buffer);
 	*line = to_line(last);
 	last = ft_check_last(last, 0, 0);
-	return (!fl_read) ? 0 : 1;
+	if (!fl_read)
+		return (0);
+	return (1);
 }

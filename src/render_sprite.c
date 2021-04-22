@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 void	sort_sprites(int *order, double *dist, t_all *all)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 void	verLine(int drawStart, int drawEnd, int color, t_all *all)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 void	move(t_all *all, double c)
 {
@@ -43,12 +43,12 @@ void	ft_rotate(t_all *all, double c)
 
 void	ft_lr_move(t_all *all, double c)
 {
-	if (all->game.map[(int)(all->game.gpos_y + all->ray.dir_y * (SPEED * c))]
-	[(int)(all->game.gpos_x - all->game.gpos_x * (SPEED * c))] != '1')
-	{
-		all->game.gpos_y -= -all->ray.dir_x * (0.2 * c);
-		all->game.gpos_x -= all->ray.dir_y * (0.2 * c);
-	}
+	if (all->game.map[(int)(all->game.gpos_x - c * (all->ray.dir_y * SPEED / 5))] \
+	[(int)(all->game.gpos_y)] != '1')
+		all->game.gpos_x -= c * (all->ray.dir_y * SPEED / 5);
+	if (all->game.map[(int)(all->game.gpos_x)] \
+		[(int)(all->game.gpos_y + c * (all->ray.dir_x * SPEED / 5))] != '1')
+		all->game.gpos_y += c * (all->ray.dir_x * SPEED / 5);
 	screen_ray(all);
 }
 

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/cube3d.h"
+#include "cub3d.h"
 
 int	check_full_tex(t_all *all, int **addr, char *filename_tex)
 {

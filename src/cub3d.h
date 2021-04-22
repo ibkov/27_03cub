@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUBE3D_H
-# define CUBE3D_H
+#ifndef CUB3D_H
+# define CUB3D_H
 
 # include "../minilibx/mlx.h"
 # include "../libft/libft.h"
-# include "../gnl/get_next_line.h"
+# include "get_next_line.h"
 # include <math.h>
 # include <stdio.h> 
 # include <unistd.h>
@@ -175,8 +175,6 @@ typedef struct s_sray
 	int		d;
 	int		texY;
 	int		color;
-	int 	*sO;
-	double	*sD;
 }	t_sray;
 
 typedef struct s_all
@@ -224,7 +222,7 @@ void	correct_position(t_all *all, int i, int j, char *ch);
 int		close_win(t_all *all);
 void	add_sprites(t_all *all, int i, int j, int count);
 void	full_new_line(char *buffer, char *new_str);
-char 	*cor_start_ch(char *buffer);
+char	*cor_start_ch(char *buffer);
 void	correct_position(t_all *all, int i, int j, char *ch);
 
 #endif
