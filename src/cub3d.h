@@ -56,6 +56,7 @@ typedef enum e_errors
 	ERROR_NO_PLAYER_POSITION,
 	ERROR_MAP_CHAR,
 	ERROR_COLOR,
+	ERROR_CLOSED_MAP,
 }	t_errors;
 
 typedef struct s_mlx
@@ -96,6 +97,7 @@ typedef struct s_tex
 typedef struct s_game
 {
 	char	**map;
+	int 	map_size;
 	int		map_x;
 	int		map_y;
 	double	gpos_x;
@@ -223,7 +225,7 @@ void	correct_position(t_all *all, int i, int j, char *ch);
 int		close_win(t_all *all);
 void	add_sprites(t_all *all, int i, int j, int count);
 void	full_new_line(char *buffer, char *new_str);
-char	*cor_start_ch(char *buffer);
+char	*cor_start_ch(char *buffer, int *i);
 void	correct_position(t_all *all, int i, int j, char *ch);
 int		skip_spaces(char *line, int *i);
 

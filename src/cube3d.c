@@ -21,7 +21,8 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 	matrix = malloc(sizeof(char *) * (ft_lst_sz(lst->map) + 1));
 	if (!matrix)
 		return (NULL);
-	while (i < ft_lst_sz(lst->map))
+	lst->game.map_size = ft_lst_sz(temp);
+	while (i < lst->game.map_size)
 	{
 		matrix[i] = malloc(sizeof(char) * (ft_strlen(temp->line) + 1));
 		if (!matrix[i])
@@ -43,8 +44,7 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 
 int	get_map(int *i, char *buf, t_all *all)
 {
-	*i += ft_strlen(buf);
-	ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
+	ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf, i)));
 	return (SUCCESS);
 }
 

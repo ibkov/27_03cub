@@ -61,20 +61,42 @@ int	get_color(int *i, char *buf, unsigned int *color)
 	return (SUCCESS);
 }
 
+int check_map_closed(int i, int j, t_all *all)
+{
+	if (all->game.map[i][j] == '0' || all->game.map[i][j] == 'N' \
+	|| all->game.map[i][j] == 'E' || all->game.map[i][j] == 'S' \
+	|| all->game.map[i][j] == 'W')
+	{
+		if (i == 0 || i == all->game.map_size - 1)
+			return (0);
+		if (j == 0 || j == ft_strlen(&all->game.map[i][0]) - 1)
+			return (0);
+	if ((i != 0 || i != all->game.map_size - 1) && (j != 0 || \
+	j != ft_strlen(&all->game.map[i][0]) - 1))
+		if (all->game.map[i - 1][j] == ' ' || all->game.map[i + 1][j] == ' ' \
+		|| all->game.map[i][j + 1] == ' ' || all->game.map[i][j - 1] == ' ' \
+		|| !all->game.map[i - 1][j] || !all->game.map[i + 1][j] || !all->game.map[i][j + 1] \
+		|| !all->game.map[i][j - 1])
+			return (0);
+	}
+	return(1);
+}
+
 int	check_map(t_all *all, int i, int j, char ch)
 {
 	while (all->game.map[i])
 	{
-		printf("%s\n", all->game.map[i]);
 		j = 0;
 		while (all->game.map[i][j] != '\0')
 		{
-			if (!ft_strchr("NSWE012", all->game.map[i][j]))
+			if (!ft_strchr("NSWE012 ", all->game.map[i][j]))
 				return (ERROR_MAP_CHAR);
 			if (ft_strchr("NSWE", all->game.map[i][j]) && !ch)
 				correct_position(all, i, j, &ch);
 			else if (ft_strchr("NSWE", all->game.map[i][j]) && ch)
 				return (ERROR_PLAYER_POSITION);
+			if (!check_map_closed(i, j, all))
+				return (ERROR_CLOSED_MAP);
 			if (all->game.map[i][j] == '2')
 				all->game.count_sprites++;
 			j++;

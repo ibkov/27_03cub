@@ -18,6 +18,8 @@ int	error_str_next(int error)
 		ft_putstr_fd("\033[31m\nError\nNot valid char in map\n\n\033[0m", 2);
 	else if (error == ERROR_COLOR)
 		ft_putstr_fd("\033[31m\nError\ncolor floor or ceil\n\n\033[0m", 2);
+	else if (error == ERROR_CLOSED_MAP)
+		ft_putstr_fd("\033[31m\nError\nMap not closed\n\n\033[0m", 2);
 	return (ERROR);
 }
 

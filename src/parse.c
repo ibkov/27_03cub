@@ -91,9 +91,6 @@ int	fetch_line_file(int i, char *buf, t_all *all, int error)
 		error = get_color(&i, buf, &all->tex.floor);
 	if (buf[i] == 'C' && buf[i + 1] == ' ')
 		error = get_color(&i, buf, &all->tex.ceil);
-	skip_spaces(buf, &i);
-	if (buf[i] != '\0')
-		return (ERROR);
 	if (error == 1 && all->win.x && all->win.y && all->tex.sp && \
 	all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
 		return (SUCCESS);

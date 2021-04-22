@@ -40,31 +40,20 @@ void	full_new_line(char *buffer, char *new_str)
 	j = 0;
 	while (buffer[i])
 	{
-		if (buffer[i] != ' ')
-		{
-			new_str[j] = buffer[i];
-			j++;
-		}
+		new_str[j] = buffer[i];
+		j++;
 		i++;
 	}
 	new_str[j] = '\0';
 }
 
-char	*cor_start_ch(char *buffer)
+char	*cor_start_ch(char *buffer, int *i)
 {
-	int		i;
-	int		cs;
+	int		j;
 	char	*new_str;
 
-	i = 0;
-	cs = 0;
-	while (buffer[i])
-	{
-		if (buffer[i] == ' ')
-			cs++;
-		i++;
-	}
-	new_str = (char *)malloc(sizeof(char) * (ft_strlen(buffer) - cs + 1));
+	j = ft_strlen(buffer);
+	new_str = (char *)malloc(sizeof(char) * (j + 1));
 	if (!new_str)
 		return (NULL);
 	full_new_line(buffer, new_str);
