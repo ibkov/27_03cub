@@ -55,6 +55,7 @@ typedef enum e_errors
 	ERROR_PLAYER_POSITION,
 	ERROR_NO_PLAYER_POSITION,
 	ERROR_MAP_CHAR,
+	ERROR_COLOR,
 }	t_errors;
 
 typedef struct s_mlx

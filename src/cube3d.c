@@ -42,7 +42,7 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 }
 
 int	get_map(int *i, char *buf, t_all *all)
-{ 
+{
 	*i += ft_strlen(buf);
 	ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf)));
 	return (SUCCESS);

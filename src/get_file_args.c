@@ -47,17 +47,16 @@ int	get_color(int *i, char *buf, unsigned int *color)
 
 	ft_bzero(&rgb, sizeof(t_color));
 	if (*color != NONE)
-		return (ERROR);
+		return (ERROR_COLOR);
 	(*i)++;
 	rgb.r = ft_atoi_cub(i, buf, 0);
 	(*i)++;
 	rgb.g = ft_atoi_cub(i, buf, 0);
 	(*i)++;
 	rgb.b = ft_atoi_cub(i, buf, 0);
-	while (!ft_strchr(INVCHARS, buf[(*i)]))
-		(*i)++;
-	if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.r > 255)
-		return (ERROR);
+	skip_spaces(buf, i);
+	if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.g > 255)
+		return (ERROR_COLOR);
 	*color = rgb.r * 256 * 256 + rgb.g * 256 + rgb.b;
 	return (SUCCESS);
 }
@@ -66,6 +65,7 @@ int	check_map(t_all *all, int i, int j, char ch)
 {
 	while (all->game.map[i])
 	{
+		printf("%s\n", all->game.map[i]);
 		j = 0;
 		while (all->game.map[i][j] != '\0')
 		{

@@ -16,6 +16,8 @@ int	error_str_next(int error)
 {
 	if (error == ERROR_MAP_CHAR)
 		ft_putstr_fd("\033[31m\nError\nNot valid char in map\n\n\033[0m", 2);
+	else if (error == ERROR_COLOR)
+		ft_putstr_fd("\033[31m\nError\ncolor floor or ceil\n\n\033[0m", 2);
 	return (ERROR);
 }
 
