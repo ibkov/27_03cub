@@ -93,6 +93,8 @@ typedef struct s_tex
 	unsigned int	floor;
 	int				fd;
 	int				count_args;
+	char			*flt;
+	int				rm;
 }	t_tex;
 
 typedef struct s_game

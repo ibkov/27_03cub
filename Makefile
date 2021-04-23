@@ -1,10 +1,10 @@
 NAME = cub3D
 
-INCLUDES = -I includes/ -I libft/ -I gnl/
-
 FLAGS = -Wall -Wextra -Werror
 
 MLX = libmlx.a
+
+LIBFT = libft.a
 
 CC = gcc -g
 
@@ -33,13 +33,19 @@ all: $(NAME)
 $(NAME): $(OBJ)	
 		$(CC) -o $(NAME) -L. -lmlx -lft -framework OpenGL -framework Appkit $(OBJ)
 	
-$(OBJ): $(MLX)
+$(OBJ): $(MLX) $(LIBFT)
 
-$(MLX):
+$(MLX): $(F_MLX)
 		make -C minilibx
 		mv minilibx/libmlx.a .
+
+$(LIBFT): $(F_LIBFT)
 		make -C libft
 		mv libft/libft.a .
+
+$(F_LIBFT): libft/%.c=%.o
+
+$(F_MLX): minilibx/%.c=%.o
 
 clean:
 		make -C minilibx clean

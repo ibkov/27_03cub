@@ -42,29 +42,29 @@ int	check_full_tex(t_all *all, int **addr, char *filename_tex)
 
 int	get_texture(int *i, char *buf, t_all *all, int **addr)
 {
-	int		rem;
-	char	*filename_tex;
 	int		error;
 
 	error = 0;
 	if (*addr != NULL)
 		return (ERROR);
 	(*i) += 2;
-	while (ft_strchr(INVCHARS, buf[(*i)]))
-		(*i)++;
-	rem = (*i);
+	skip_spaces(buf, i);
+	all->tex.rm = (*i);
 	while (!ft_strchr(INVCHARS, buf[(*i)]))
 		(*i)++;
-	filename_tex = (char *)malloc(sizeof(char) * (*i - rem + 1));
-	if (!filename_tex)
+	all->tex.flt = (char *)malloc(sizeof(char) * (*i - all->tex.rm + 1));
+	if (!all->tex.flt)
 		return (ERROR_MALLOC);
-	*i = rem;
-	rem = 0;
+	*i = all->tex.rm;
+	all->tex.rm = 0;
 	while (buf[*i] != ' ' && buf[*i] != '\0')
-		filename_tex[rem++] = buf[(*i)++];
-	filename_tex[rem] = '\0';
-	error = check_full_tex(all, addr, filename_tex);
-	free(filename_tex);
+		all->tex.flt[all->tex.rm++] = buf[(*i)++];
+	all->tex.flt[all->tex.rm] = '\0';
+	error = check_full_tex(all, addr, all->tex.flt);
+	free(all->tex.flt);
+	skip_spaces(buf, i);
+	if (buf[*i] != '\0')
+		return (ERROR);
 	all->tex.count_args++;
 	return (error);
 }
