@@ -21,7 +21,6 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 	matrix = malloc(sizeof(char *) * (ft_lst_sz(lst->map) + 1));
 	if (!matrix)
 		return (NULL);
-	lst->game.map_size = ft_lst_sz(temp);
 	while (i < lst->game.map_size)
 	{
 		matrix[i] = malloc(sizeof(char) * (ft_strlen(temp->line) + 1));
@@ -55,6 +54,7 @@ int	run_game(int cr_bmp, char *namefile, t_all *all)
 	error = file_parse(0, namefile, all, 0);
 	if (error != SUCCESS)
 		return (error_str(error));
+	all->game.map_size = ft_lst_sz(all->map);
 	all->game.map = map_to_matrix(all, 0, 0);
 	error = check_map(all, 0, 0, 0);
 	if (error != SUCCESS)

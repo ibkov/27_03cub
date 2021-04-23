@@ -61,7 +61,7 @@ int	get_color(int *i, char *buf, unsigned int *color)
 	return (SUCCESS);
 }
 
-int check_map_closed(int i, int j, t_all *all)
+int	check_map_closed(int i, int j, t_all *all)
 {
 	if (all->game.map[i][j] == '0' || all->game.map[i][j] == 'N' \
 	|| all->game.map[i][j] == 'E' || all->game.map[i][j] == 'S' \
@@ -71,15 +71,15 @@ int check_map_closed(int i, int j, t_all *all)
 			return (0);
 		if (j == 0 || j == ft_strlen(&all->game.map[i][0]) - 1)
 			return (0);
-	if ((i != 0 || i != all->game.map_size - 1) && (j != 0 || \
-	j != ft_strlen(&all->game.map[i][0]) - 1))
-		if (all->game.map[i - 1][j] == ' ' || all->game.map[i + 1][j] == ' ' \
-		|| all->game.map[i][j + 1] == ' ' || all->game.map[i][j - 1] == ' ' \
-		|| !all->game.map[i - 1][j] || !all->game.map[i + 1][j] || !all->game.map[i][j + 1] \
-		|| !all->game.map[i][j - 1])
-			return (0);
+		if ((i != 0 || i != all->game.map_size - 1) && (j != 0 || \
+			j != ft_strlen(&all->game.map[i][0]) - 1))
+			if (all->game.map[i - 1][j] == ' ' || all->game.map[i + 1][j] == ' ' \
+			|| all->game.map[i][j + 1] == ' ' || all->game.map[i][j - 1] == ' ' \
+			|| !all->game.map[i - 1][j] || !all->game.map[i + 1][j] || !all->game.map[i][j + 1] \
+			|| !all->game.map[i][j - 1])
+				return (0);
 	}
-	return(1);
+	return (1);
 }
 
 int	check_map(t_all *all, int i, int j, char ch)

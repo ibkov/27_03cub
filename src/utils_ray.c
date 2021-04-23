@@ -52,11 +52,11 @@ void	draw_fc_wall(t_all *all, int y)
 		all->ray.texPos += all->ray.step;
 		all->ray.color = all->tex.no[64 * all->ray.texY + all->ray.texX];
 		if (all->ray.side == 1 && all->ray.ray_dir_y > 0)
-			all->ray.color = all->tex.so[64 * all->ray.texY + all->ray.texX];
+			all->ray.color = all->tex.ea[64 * all->ray.texY + all->ray.texX];
 		if (all->ray.side == 1 && all->ray.ray_dir_y < 0)
 			all->ray.color = all->tex.we[64 * all->ray.texY + all->ray.texX];
 		if (all->ray.side == 0 && all->ray.ray_dir_x > 0)
-			all->ray.color = all->tex.ea[64 * all->ray.texY + all->ray.texX];
+			all->ray.color = all->tex.so[64 * all->ray.texY + all->ray.texX];
 		if (all->ray.side == 0 && all->ray.ray_dir_x < 0)
 			all->ray.color = all->tex.no[64 * all->ray.texY + all->ray.texX];
 		all->img.addr[y++ *all->win.x + all->ray.sx] = all->ray.color;

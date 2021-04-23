@@ -97,7 +97,7 @@ typedef struct s_tex
 typedef struct s_game
 {
 	char	**map;
-	int 	map_size;
+	int		map_size;
 	int		map_x;
 	int		map_y;
 	double	gpos_x;
