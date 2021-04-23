@@ -97,4 +97,5 @@ int	main(int argc, char **argv)
 		init_struct(0, argv[1]);
 	else
 		ft_putstr_fd("\033[31m\nError\nMAIN ARGUMENTS\n\n\033[0m", 2);
+	return (0);
 }

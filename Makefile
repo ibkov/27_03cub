@@ -4,6 +4,8 @@ INCLUDES = -I includes/ -I libft/ -I gnl/
 
 FLAGS = -Wall -Wextra -Werror
 
+MLX = libmlx.a
+
 CC = gcc -g
 
 DIR_L = src/
@@ -29,16 +31,20 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)	
+		$(CC) -o $(NAME) -L. -lmlx -lft -framework OpenGL -framework Appkit $(OBJ)
+	
+$(OBJ): $(MLX)
+
+$(MLX):
 		make -C minilibx
 		mv minilibx/libmlx.a .
 		make -C libft
 		mv libft/libft.a .
-		$(CC) -o $(NAME) -L. -lmlx -lft -framework OpenGL -framework Appkit $(OBJ)
 
 clean:
 		make -C minilibx clean
 		make -C libft clean
-		rm -rf $(OBJ) libft.a libmlx.a
+		rm -rf $(OBJ) libft.a libmlx.a bitmap.bmp
 
 fclean: clean
 		make -C minilibx clean

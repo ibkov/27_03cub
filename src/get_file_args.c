@@ -14,12 +14,17 @@
 
 int	ft_atoi_cub(int *i, char *buf, int num)
 {
+	int	check;
+
 	skip_spaces(buf, i);
+	check = *i;
 	while (buf[*i] >= '0' && buf[*i] <= '9')
 	{
 		num = num * 10 + (buf[*i] - 48);
 		(*i)++;
 	}
+	if (check == *i)
+		return (-100);
 	return (num);
 }
 
@@ -51,12 +56,15 @@ int	get_color(int *i, char *buf, unsigned int *color, t_all *all)
 		return (ERROR_COLOR);
 	(*i)++;
 	rgb.r = ft_atoi_cub(i, buf, 0);
-	(*i)++;
+	if (!buf[(*i)++])
+		return (ERROR_COLOR);
 	rgb.g = ft_atoi_cub(i, buf, 0);
-	(*i)++;
+	if (!buf[(*i)++])
+		return (ERROR_COLOR);
 	rgb.b = ft_atoi_cub(i, buf, 0);
 	skip_spaces(buf, i);
-	if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.g > 255)
+	if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.g > 255 \
+	|| rgb.r < 0 || rgb.b < 0 || rgb.g < 0)
 		return (ERROR_COLOR);
 	*color = rgb.r * 256 * 256 + rgb.g * 256 + rgb.b;
 	all->tex.count_args++;
