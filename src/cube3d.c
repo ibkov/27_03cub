@@ -23,15 +23,13 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 		return (NULL);
 	while (i < lst->game.map_size)
 	{
-		matrix[i] = malloc(sizeof(char) * (ft_strlen(temp->line) + 1));
+		matrix[i] = malloc(sizeof(char) * (lst->game.map_mls + 1));
 		if (!matrix[i])
 			return (NULL);
-		j = 0;
-		while (temp->line[j] != '\0')
-		{
+		ft_bzero(matrix[i], lst->game.map_mls + 1);
+		j = -1;
+		while (temp->line[++j] != '\0')
 			matrix[i][j] = temp->line[j];
-			j++;
-		}
 		matrix[i++][j] = '\0';
 		free(temp->line);
 		temp = temp->next;
@@ -43,7 +41,7 @@ char	**map_to_matrix(t_all *lst, int i, int j)
 
 int	get_map(int *i, char *buf, t_all *all)
 {
-	ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf, i)));
+	ft_lstadd_b(&all->map, ft_lstn(cor_start_ch(buf, i, all)));
 	return (SUCCESS);
 }
 
@@ -92,7 +90,7 @@ void	init_struct(int cr_bmp, char *namefile)
 int	main(int argc, char **argv)
 {
 	if (argc == 3 && !ft_strncmp(argv[1] + ft_strlen(argv[1]) - 4, ".cub", 4) && \
-		!ft_strncmp(argv[2], "--save", 6))
+		!ft_strncmp(argv[2], "--save", 6) && !argv[2][6])
 		init_struct(1, argv[1]);
 	else if (argc == 2 && !ft_strncmp(argv[1] + \
 	ft_strlen(argv[1]) - 4, ".cub", 4))

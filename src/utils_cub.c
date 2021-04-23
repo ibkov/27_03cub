@@ -47,12 +47,14 @@ void	full_new_line(char *buffer, char *new_str)
 	new_str[j] = '\0';
 }
 
-char	*cor_start_ch(char *buffer, int *i)
+char	*cor_start_ch(char *buffer, int *i, t_all *all)
 {
 	int		j;
 	char	*new_str;
 
 	j = ft_strlen(buffer);
+	if (all->game.map_mls < j)
+		all->game.map_mls = j;
 	new_str = (char *)malloc(sizeof(char) * (j + 1));
 	if (!new_str)
 		return (NULL);

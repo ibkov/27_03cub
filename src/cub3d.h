@@ -92,12 +92,14 @@ typedef struct s_tex
 	unsigned int	ceil;
 	unsigned int	floor;
 	int				fd;
+	int				count_args;
 }	t_tex;
 
 typedef struct s_game
 {
 	char	**map;
 	int		map_size;
+	int		map_mls;
 	int		map_x;
 	int		map_y;
 	double	gpos_x;
@@ -201,7 +203,7 @@ int		file_parse(int fd, char *namefile, t_all *all, int error);
 int		get_resolution(int *i, char *buf, t_all *all);
 int		get_texture(int *i, char *buf, t_all *all, int **addr);
 int		check_full_tex(t_all *all, int **addr, char *filename_tex);
-int		get_color(int *i, char *buf, unsigned int *clr);
+int		get_color(int *i, char *buf, unsigned int *clr, t_all *all);
 int		get_map(int *i, char *buf, t_all *all);
 int		ft_lst_sz(t_map *lst);
 void	ft_lstadd_b(t_map **lst, t_map *new);
@@ -219,13 +221,12 @@ int		close_win(t_all *all);
 int		screenshot	(t_all *all);
 void	ft_sprite(t_all *all);
 void	draw_sprite(t_all *all, int i);
-int		get_color(int *i, char *buf, unsigned int *color);
 int		check_map(t_all *all, int i, int j, char ch);
 void	correct_position(t_all *all, int i, int j, char *ch);
 int		close_win(t_all *all);
 void	add_sprites(t_all *all, int i, int j, int count);
 void	full_new_line(char *buffer, char *new_str);
-char	*cor_start_ch(char *buffer, int *i);
+char	*cor_start_ch(char *buffer, int *i, t_all *all);
 void	correct_position(t_all *all, int i, int j, char *ch);
 int		skip_spaces(char *line, int *i);
 

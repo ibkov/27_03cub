@@ -38,10 +38,11 @@ int	get_resolution(int *i, char *buf, t_all *all)
 	skip_spaces(buf, i);
 	if (all->win.x < 1 || all->win.y < 1 || buf[*i] != '\0')
 		return (ERROR_END_lINE);
+	all->tex.count_args++;
 	return (SUCCESS);
 }
 
-int	get_color(int *i, char *buf, unsigned int *color)
+int	get_color(int *i, char *buf, unsigned int *color, t_all *all)
 {
 	t_color	rgb;
 
@@ -58,6 +59,7 @@ int	get_color(int *i, char *buf, unsigned int *color)
 	if (buf[*i] || rgb.r > 255 || rgb.b > 255 || rgb.g > 255)
 		return (ERROR_COLOR);
 	*color = rgb.r * 256 * 256 + rgb.g * 256 + rgb.b;
+	all->tex.count_args++;
 	return (SUCCESS);
 }
 

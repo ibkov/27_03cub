@@ -65,6 +65,7 @@ int	get_texture(int *i, char *buf, t_all *all, int **addr)
 	filename_tex[rem] = '\0';
 	error = check_full_tex(all, addr, filename_tex);
 	free(filename_tex);
+	all->tex.count_args++;
 	return (error);
 }
 
@@ -73,7 +74,7 @@ int	fetch_line_file(int i, char *buf, t_all *all, int error)
 	skip_spaces(buf, &i);
 	if (buf[i] == '\0')
 		return (SUCCESS);
-	if (buf[i] == '1' && buf[i] != '\0')
+	if (buf[i] == '1' && all->tex.count_args == 8)
 		error = get_map(&i, buf, all);
 	if (buf[i] == 'R' && buf[i + 1] == ' ')
 		error = get_resolution(&i, buf, all);
@@ -88,9 +89,9 @@ int	fetch_line_file(int i, char *buf, t_all *all, int error)
 	if (buf[i] == 'S' && buf[i + 1] == ' ')
 		error = get_texture(&i, buf, all, &all->tex.sp);
 	if (buf[i] == 'F' && buf[i + 1] == ' ')
-		error = get_color(&i, buf, &all->tex.floor);
+		error = get_color(&i, buf, &all->tex.floor, all);
 	if (buf[i] == 'C' && buf[i + 1] == ' ')
-		error = get_color(&i, buf, &all->tex.ceil);
+		error = get_color(&i, buf, &all->tex.ceil, all);
 	if (error == 1 && all->win.x && all->win.y && all->tex.sp && \
 	all->tex.no && all->tex.we && all->tex.so && all->tex.ea)
 		return (SUCCESS);
